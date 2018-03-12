@@ -12,7 +12,7 @@ import com.example.vincentwang.rainbowtranslate.R
 import com.example.vincentwang.rainbowtranslate.adapter.SearchStoreAdapter
 import com.example.vincentwang.rainbowtranslate.data.WordMain
 import com.example.vincentwang.rainbowtranslate.framework.BaseFragment
-import com.example.vincentwang.rainbowtranslate.translate.TranslateModel
+import com.example.vincentwang.rainbowtranslate.TranslateModel
 import com.example.vincentwang.rainbowtranslate.util.ToolUtils
 import kotlinx.android.synthetic.main.fragment_search_store.*
 import java.text.SimpleDateFormat

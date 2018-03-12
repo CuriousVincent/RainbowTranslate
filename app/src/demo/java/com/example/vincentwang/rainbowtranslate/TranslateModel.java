@@ -1,4 +1,4 @@
-package com.example.vincentwang.rainbowtranslate.translate;
+package com.example.vincentwang.rainbowtranslate;
 
 import com.example.vincentwang.rainbowtranslate.data.SearchTime;
 import com.example.vincentwang.rainbowtranslate.data.SearchTimeDao;

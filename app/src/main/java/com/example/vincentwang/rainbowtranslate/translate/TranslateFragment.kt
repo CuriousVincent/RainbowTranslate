@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import com.arlib.floatingsearchview.FloatingSearchView
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion
 import com.example.vincentwang.rainbowtranslate.R
+import com.example.vincentwang.rainbowtranslate.TranslateModel
 import com.example.vincentwang.rainbowtranslate.adapter.TranslateAdapter
 import com.example.vincentwang.rainbowtranslate.data.WordTotalInfo
 import com.example.vincentwang.rainbowtranslate.framework.BaseFragment
