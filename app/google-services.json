@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "990128985820",
+    "firebase_url": "https://rainbowtranslate.firebaseio.com",
+    "project_id": "rainbowtranslate",
+    "storage_bucket": "rainbowtranslate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990128985820:android:f465e433a085dabf",
+        "android_client_info": {
+          "package_name": "com.example.vincentwang.rainbowtranslate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "990128985820-k0erfkpuepehmsi4v58flffkv6qcrsjr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vincentwang.rainbowtranslate",
+            "certificate_hash": "58378297a043c67a2711717317c61ccc930b7b45"
+          }
+        },
+        {
+          "client_id": "990128985820-lntaj7ovh084cnitvb4qonkfqt2f03rf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLQ7yNTfN1xx9KlpaxeaWB2Nyi9gLWZD0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "990128985820-lntaj7ovh084cnitvb4qonkfqt2f03rf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

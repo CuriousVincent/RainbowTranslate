@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">RainbowTranslate</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="starting_day">開始日期</string>
+    <string name="ending_day">結束日期</string>
+    <string name="search">搜尋</string>
+    <string name="note">紀錄</string>
+    <string name="setting">設定</string>
+    <string name="confirm">確認</string>
+
+
+    <string-array name="store_type_spinner_text">
+        <item>今日</item>
+        <item>期間</item>
+        <item>全部</item>
+    </string-array>
+
+</resources>
