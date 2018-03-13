@@ -1,16 +1,19 @@
 package com.example.vincentwang.rainbowtranslate.store;
 
 import com.example.vincentwang.rainbowtranslate.data.WordMain;
+import com.example.vincentwang.rainbowtranslate.framework.BasePresenter;
 import com.example.vincentwang.rainbowtranslate.translate.TranslateContract;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+
+import io.reactivex.subscribers.ResourceSubscriber;
 
 /**
  * Created by vincentwang on 2017/8/27.
  */
 
-public class SearchStorePresenter implements SearchStoreContract.Presenter {
+public class SearchStorePresenter extends BasePresenter implements SearchStoreContract.Presenter {
 
     SearchStoreContract.View view;
 
@@ -25,16 +28,23 @@ public class SearchStorePresenter implements SearchStoreContract.Presenter {
     @Override
     public void searchbuttonclick(int spinnerposition,Calendar startDay,Calendar endDay) {
 
-        model.getWordMain(spinnerposition, new TranslateContract.Model.GetWordMainCallback() {
-            @Override
-            public void getWordMain(List<WordMain> WordMains) {
-                view.showSearchList(WordMains);
-            }
+        model.getWordMain(spinnerposition,startDay,endDay)
+                .compose(this.<ArrayList<WordMain>>applySchedulers())
+                .subscribeWith(new ResourceSubscriber<ArrayList<WordMain>>() {
+                    @Override
+                    public void onNext(ArrayList<WordMain> wordMains) {
+                        view.showSearchList(wordMains);
+                    }
 
-            @Override
-            public void dataError() {
+                    @Override
+                    public void onError(Throwable t) {
 
-            }
-        },startDay,endDay);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }

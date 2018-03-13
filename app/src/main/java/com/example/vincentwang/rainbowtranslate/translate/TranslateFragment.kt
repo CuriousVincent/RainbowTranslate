@@ -2,8 +2,6 @@ package com.example.vincentwang.rainbowtranslate.translate
 
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -38,14 +36,6 @@ class TranslateFragment : BaseFragment(), FloatingSearchView.OnQueryChangeListen
 
     lateinit var presenter: TranslateContract.Presneter
 
-    internal var handler: Handler = object : Handler() {
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-            translateAdapter.setWordTotalInfo(wordTotalInfos)
-
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,9 +46,7 @@ class TranslateFragment : BaseFragment(), FloatingSearchView.OnQueryChangeListen
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view = inflater!!.inflate(R.layout.fragment_translate, container, false)
-
-        return view
+        return inflater!!.inflate(R.layout.fragment_translate, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -98,16 +86,14 @@ class TranslateFragment : BaseFragment(), FloatingSearchView.OnQueryChangeListen
 
     override fun showWordTranslateInfo(wordTotalInfos: List<WordTotalInfo>) {
         this.wordTotalInfos = wordTotalInfos
-        handler.sendEmptyMessage(0)
+        translateAdapter.setWordTotalInfo(wordTotalInfos)
     }
 
     companion object {
-
         // TODO: Rename and change types and number of parameters
         fun newInstance(word: String): TranslateFragment {
             val fragment = TranslateFragment()
             fragment.word = word
-
             return fragment
         }
     }

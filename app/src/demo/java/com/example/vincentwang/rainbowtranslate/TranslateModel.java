@@ -28,6 +28,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
+
 /**
  * Created by vincentwang on 2017/8/17.
  */
@@ -48,10 +53,10 @@ public class TranslateModel implements Model {
     }
 
 
-    private List<WordTotalInfo> getWordTotalInfo(WordMain wordMain) {
-        List<WordTotalInfo> wordTotalInfos = new ArrayList<>();
+    private ArrayList<WordTotalInfo> getWordTotalInfo(WordMain wordMain) {
+        ArrayList<WordTotalInfo> wordTotalInfos = new ArrayList<>();
         String wordid = wordMain.getWordid();
-        List<WordInfo> wordInfolist = getWordInfobyWordId(wordid);
+        ArrayList<WordInfo> wordInfolist = getWordInfobyWordId(wordid);
         if (wordInfolist != null) {
             for (WordInfo wordInfo : wordInfolist) {
                 String wordinfoid = wordInfo.getWordinfoid();
@@ -72,6 +77,7 @@ public class TranslateModel implements Model {
         List<WordMain> wordmainlist = wordquery.list();
         return wordmainlist;
     }
+
     private List<WordMain> getWordMainbyWordId(String wordid) {
         QueryBuilder<WordMain> wordquery = wordMainDao.queryBuilder();
         wordquery.where(WordMainDao.Properties.Wordid.eq(wordid));
@@ -79,10 +85,10 @@ public class TranslateModel implements Model {
         return wordmainlist;
     }
 
-    private List<WordInfo> getWordInfobyWordId(String wordid) {
+    private ArrayList<WordInfo> getWordInfobyWordId(String wordid) {
         QueryBuilder<WordInfo> wordinfoquery = wordInfoDao.queryBuilder();
         wordinfoquery.where(WordInfoDao.Properties.Wordid.eq(wordid));
-        List<WordInfo> wordInfolist = wordinfoquery.list();
+        ArrayList<WordInfo> wordInfolist = new ArrayList<>(wordinfoquery.list());
         return wordInfolist;
     }
 
@@ -93,25 +99,24 @@ public class TranslateModel implements Model {
         return wordexlist;
     }
 
-    private List<WordMain> getWordMain() {
-        List<WordMain> wordmainlist = wordMainDao.loadAll();
+    private ArrayList<WordMain> getWordMain() {
+        ArrayList<WordMain> wordmainlist = new ArrayList<>(wordMainDao.loadAll());
         return wordmainlist;
     }
 
-    private List<SearchTime> getTodaySearchTime(){
-        List<SearchTime> searchTimes = queryOneDayData(searchTimeDao.queryBuilder(),SearchTimeDao.Properties.Searchtime,new Date());
+    private List<SearchTime> getTodaySearchTime() {
+        List<SearchTime> searchTimes = queryOneDayData(searchTimeDao.queryBuilder(), SearchTimeDao.Properties.Searchtime, new Date());
         return searchTimes;
     }
 
-    private List<SearchTime> getPeriodDateSearchTime(Calendar startDay, Calendar endDay){
-        List<SearchTime> searchTimes = queryPeriodDateData(searchTimeDao.queryBuilder(),SearchTimeDao.Properties.Searchtime,startDay,endDay);
+    private List<SearchTime> getPeriodDateSearchTime(Calendar startDay, Calendar endDay) {
+        List<SearchTime> searchTimes = queryPeriodDateData(searchTimeDao.queryBuilder(), SearchTimeDao.Properties.Searchtime, startDay, endDay);
         return searchTimes;
     }
 
-    private List<WordMain> getWordMain(List<SearchTime> searchTimes){
-
-        List<WordMain> wordMains = new ArrayList<>();
-        for (int time = searchTimes.size()-1;time>=0;time--) {
+    private ArrayList<WordMain> getWordMain(List<SearchTime> searchTimes) {
+        ArrayList<WordMain> wordMains = new ArrayList<>();
+        for (int time = searchTimes.size() - 1; time >= 0; time--) {
             wordMains.add(getWordMainbyWordId(searchTimes.get(time).getWordid()).get(0));
         }
         ToolUtils.rmRepeadtedElementByOrder(wordMains);
@@ -120,54 +125,58 @@ public class TranslateModel implements Model {
 
 
     @Override
-    public void getWordTranslateInfo(String word, GetWordCallback callback) {
-        try {
-            List<WordTotalInfo> wordTotalInfos;
-            List<WordMain> wordMainList = getWordMainbyWord(word);
-            if (wordMainList.size() != 0) {
-                WordMain wordMain = wordMainList.get(0);
-                String wordid = wordMain.getWordid();
-                String timeid = UUID.randomUUID().toString();
-                insertSearchTime(timeid,wordid,new Date());
-                wordMain.setTimes(wordMain.getTimes()+1);
-                wordMainDao.update(wordMain);
-                wordTotalInfos = getWordTotalInfo(wordMain);
-            } else {
-                saveWordTranslateInfo(word);
-                wordMainList = getWordMainbyWord(word);
-                wordTotalInfos = getWordTotalInfo(wordMainList.get(0));
+    public Flowable<ArrayList<WordTotalInfo>> getWordTranslateInfo(final String word) {
+        return Flowable.create(new FlowableOnSubscribe<ArrayList<WordTotalInfo>>() {
 
+            @Override
+            public void subscribe(FlowableEmitter<ArrayList<WordTotalInfo>> e) throws Exception {
+                ArrayList<WordTotalInfo> wordTotalInfos;
+                List<WordMain> wordMainList = getWordMainbyWord(word);
+                if (wordMainList.size() != 0) {
+                    WordMain wordMain = wordMainList.get(0);
+                    String wordid = wordMain.getWordid();
+                    String timeid = UUID.randomUUID().toString();
+                    insertSearchTime(timeid, wordid, new Date());
+                    wordMain.setTimes(wordMain.getTimes() + 1);
+                    wordMainDao.update(wordMain);
+                    wordTotalInfos = getWordTotalInfo(wordMain);
+                } else {
+                    saveWordTranslateInfo(word);
+                    wordMainList = getWordMainbyWord(word);
+                    wordTotalInfos = getWordTotalInfo(wordMainList.get(0));
+
+                }
+                e.onNext(wordTotalInfos);
             }
-            callback.getWord(wordTotalInfos);
-        } catch (Exception e) {
-            callback.onWordnotfound();
-        }
+        }, BackpressureStrategy.BUFFER);
     }
 
     @Override
-    public void getWordMain(int spinnerposition ,GetWordMainCallback callback,Calendar startDay,Calendar endDay) {
+    public Flowable<ArrayList<WordMain>> getWordMain(final int spinnerposition,final Calendar startDay,final Calendar endDay) {
+        return Flowable.create(new FlowableOnSubscribe<ArrayList<WordMain>>() {
+            @Override
+            public void subscribe(FlowableEmitter<ArrayList<WordMain>> e) throws Exception {
+                ArrayList<WordMain> wordMains = null;
+                switch (spinnerposition) {
+                    case 0:
+                        wordMains = getWordMain(getTodaySearchTime());
+                        break;
+                    case 1:
+                        wordMains = getWordMain(getPeriodDateSearchTime(startDay, endDay));
+                        break;
+                    case 2:
+                        wordMains = getWordMain();
+                        break;
+                }
 
-        List<WordMain> wordMains = null;
-        switch (spinnerposition){
-
-            case 0:
-                wordMains = getWordMain(getTodaySearchTime());
-                break;
-            case 1:
-                wordMains = getWordMain(getPeriodDateSearchTime(startDay,endDay));
-                break;
-            case 2:
-                wordMains = getWordMain();
-                break;
-        }
-
-        if(wordMains != null) {
-            callback.getWordMain(wordMains);
-        } else {
-            callback.dataError();
-        }
+                if (wordMains != null) {
+                    e.onNext(wordMains);
+                } else {
+                    e.onError(new Exception());
+                }
+            }
+        }, BackpressureStrategy.BUFFER);
     }
-
 
     private void saveWordTranslateInfo(final String sWord) throws Exception {
         JsoupUtil.getInstance().getHttp("http://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/" + sWord
@@ -248,15 +257,16 @@ public class TranslateModel implements Model {
         wordExample.setExampletranslate(exampletranslate);
         wordExampleDao.insert(wordExample);
     }
+
     //取得某天的所有資料
-    private <T> List<T> queryOneDayData(QueryBuilder<T> builder, Property dateProperty, Date date){
+    private <T> List<T> queryOneDayData(QueryBuilder<T> builder, Property dateProperty, Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.HOUR, 0);
-        List<T> queryList = queryPeriodDateData(builder,dateProperty,calendar,calendar);
+        List<T> queryList = queryPeriodDateData(builder, dateProperty, calendar, calendar);
 
 
 //        Date today = calendar.getTime();
@@ -265,11 +275,12 @@ public class TranslateModel implements Model {
 //        List<T> queryList = builder.where(builder.and(dateProperty.ge(today), dateProperty.lt(nextDay))).list();
         return queryList;
     }
-    private <T> List<T> queryPeriodDateData(QueryBuilder<T> builder, Property dateProperty, Calendar startDate,Calendar endDate){
+
+    private <T> List<T> queryPeriodDateData(QueryBuilder<T> builder, Property dateProperty, Calendar startDate, Calendar endDate) {
         Calendar startcalendar = startDate;
         Date startDay = startcalendar.getTime();
         Calendar endcalendar = endDate;
-        endcalendar.add(Calendar.DAY_OF_MONTH,1);
+        endcalendar.add(Calendar.DAY_OF_MONTH, 1);
         Date endDay = endcalendar.getTime();
         List<T> queryList = builder.where(builder.and(dateProperty.ge(startDay), dateProperty.lt(endDay))).list();
         return queryList;

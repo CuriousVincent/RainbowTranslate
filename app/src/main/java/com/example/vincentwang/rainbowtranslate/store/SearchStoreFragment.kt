@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.example.vincentwang.rainbowtranslate.R
+import com.example.vincentwang.rainbowtranslate.TranslateModel
 import com.example.vincentwang.rainbowtranslate.adapter.SearchStoreAdapter
 import com.example.vincentwang.rainbowtranslate.data.WordMain
 import com.example.vincentwang.rainbowtranslate.framework.BaseFragment
-import com.example.vincentwang.rainbowtranslate.TranslateModel
 import com.example.vincentwang.rainbowtranslate.util.ToolUtils
 import kotlinx.android.synthetic.main.fragment_search_store.*
 import java.text.SimpleDateFormat
@@ -29,7 +29,6 @@ class SearchStoreFragment : BaseFragment(), SearchStoreContract.View, View.OnCli
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         presenter = SearchStorePresenter(this, TranslateModel())
     }
 
@@ -110,7 +109,7 @@ class SearchStoreFragment : BaseFragment(), SearchStoreContract.View, View.OnCli
                     button_confirm.isEnabled = true
                 }
             })
-            R.id.button_confirm -> presenter!!.searchbuttonclick(spinner_store_period.selectedItemPosition, startday, endday)
+            R.id.button_confirm -> presenter?.searchbuttonclick(spinner_store_period.selectedItemPosition, startday, endday)
         }
     }
 
@@ -125,7 +124,6 @@ class SearchStoreFragment : BaseFragment(), SearchStoreContract.View, View.OnCli
 
     override fun showSearchList(wordMains: List<WordMain>) {
         searchStoreAdapter.setWordMain(wordMains)
-
     }
 
 

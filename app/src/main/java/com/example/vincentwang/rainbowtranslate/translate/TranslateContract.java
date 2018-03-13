@@ -3,8 +3,11 @@ package com.example.vincentwang.rainbowtranslate.translate;
 import com.example.vincentwang.rainbowtranslate.data.WordMain;
 import com.example.vincentwang.rainbowtranslate.data.WordTotalInfo;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import io.reactivex.Flowable;
 
 /**
  * Created by vincentwang on 2017/8/9.
@@ -18,20 +21,10 @@ public interface TranslateContract {
         void loadWordAllInfo(String word);
     }
     interface Model{
-        void getWordTranslateInfo(String word,GetWordCallback callback);
 
-        void getWordMain(int spinnerposition, GetWordMainCallback callback, Calendar startDay, Calendar endDay);
+        Flowable<ArrayList<WordTotalInfo>> getWordTranslateInfo(String word);
 
+        Flowable<ArrayList<WordMain>> getWordMain(int spinnerposition, Calendar startDay, Calendar endDay);
 
-        interface GetWordCallback {
-
-            void getWord(List<WordTotalInfo> wordTotalInfos);
-
-            void onWordnotfound();
-        }
-        interface GetWordMainCallback{
-            void getWordMain(List<WordMain> WordMains);
-            void dataError();
-        }
     }
 }
