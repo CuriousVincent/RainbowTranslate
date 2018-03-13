@@ -152,23 +152,42 @@ public class TranslateModel implements Model {
     }
 
     @Override
-    public Flowable<ArrayList<WordMain>> getWordMain(final int spinnerposition,final Calendar startDay,final Calendar endDay) {
+    public Flowable<ArrayList<WordMain>> getWordMainPeriod(final Calendar startDay,final Calendar endDay) {
         return Flowable.create(new FlowableOnSubscribe<ArrayList<WordMain>>() {
             @Override
             public void subscribe(FlowableEmitter<ArrayList<WordMain>> e) throws Exception {
-                ArrayList<WordMain> wordMains = null;
-                switch (spinnerposition) {
-                    case 0:
-                        wordMains = getWordMain(getTodaySearchTime());
-                        break;
-                    case 1:
-                        wordMains = getWordMain(getPeriodDateSearchTime(startDay, endDay));
-                        break;
-                    case 2:
-                        wordMains = getWordMain();
-                        break;
-                }
+                ArrayList<WordMain> wordMains = getWordMain(getPeriodDateSearchTime(startDay, endDay));
 
+                if (wordMains != null) {
+                    e.onNext(wordMains);
+                } else {
+                    e.onError(new Exception());
+                }
+            }
+        }, BackpressureStrategy.BUFFER);
+    }
+
+    @Override
+    public Flowable<ArrayList<WordMain>> getWordMainToday() {
+        return Flowable.create(new FlowableOnSubscribe<ArrayList<WordMain>>() {
+            @Override
+            public void subscribe(FlowableEmitter<ArrayList<WordMain>> e) throws Exception {
+                ArrayList<WordMain> wordMains = getWordMain(getTodaySearchTime());
+                if (wordMains != null) {
+                    e.onNext(wordMains);
+                } else {
+                    e.onError(new Exception());
+                }
+            }
+        }, BackpressureStrategy.BUFFER);
+    }
+
+    @Override
+    public Flowable<ArrayList<WordMain>> getWordMainAll() {
+        return Flowable.create(new FlowableOnSubscribe<ArrayList<WordMain>>() {
+            @Override
+            public void subscribe(FlowableEmitter<ArrayList<WordMain>> e) throws Exception {
+                ArrayList<WordMain> wordMains = getWordMain();
                 if (wordMains != null) {
                     e.onNext(wordMains);
                 } else {
@@ -218,8 +237,6 @@ public class TranslateModel implements Model {
             }
         }
     }
-
-
     private void insertWordmain(String wordid, @NotNull String word, int times) {
         WordMain wordMain = new WordMain();
         wordMain.setWordid(wordid);

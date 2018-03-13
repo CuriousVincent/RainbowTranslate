@@ -49,7 +49,6 @@ class SearchStoreFragment : BaseFragment(), SearchStoreContract.View, View.OnCli
         spinner_store_period.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, l: Long) {
                 when (position) {
-
                     0 -> {
                         text_startDay.visibility = View.GONE
                         text_endDay.visibility = View.GONE
@@ -58,11 +57,7 @@ class SearchStoreFragment : BaseFragment(), SearchStoreContract.View, View.OnCli
                     1 -> {
                         text_startDay.visibility = View.VISIBLE
                         text_endDay.visibility = View.VISIBLE
-                        if (text_startDay.text.toString() != resources.getString(R.string.starting_day) && text_endDay.text.toString() != resources.getString(R.string.ending_day)) {
-                            button_confirm.isEnabled = true
-                        } else {
-                            button_confirm.isEnabled = false
-                        }
+                        button_confirm.isEnabled = text_startDay.text.toString() != "" && text_endDay.text.toString() != ""
                     }
                     2 -> {
                         text_startDay.visibility = View.GONE
@@ -109,7 +104,14 @@ class SearchStoreFragment : BaseFragment(), SearchStoreContract.View, View.OnCli
                     button_confirm.isEnabled = true
                 }
             })
-            R.id.button_confirm -> presenter?.searchbuttonclick(spinner_store_period.selectedItemPosition, startday, endday)
+            R.id.button_confirm ->
+            {
+                when(spinner_store_period.selectedItemPosition) {
+                    0 -> presenter?.searchToday()
+                    1 -> presenter?.searchPeriod(startday, endday)
+                    2 -> presenter?.searchAll()
+                }
+            }
         }
     }
 

@@ -9,7 +9,7 @@ import java.util.*
  * Created by vincentwang on 2017/8/18.
  */
 
-class TranslatePresenter(internal var view: TranslateContract.View, internal var model: TranslateContract.Model) : BasePresenter(), TranslateContract.Presneter {
+class TranslatePresenter(val view: TranslateContract.View,val model: TranslateContract.Model) : BasePresenter(), TranslateContract.Presneter {
 
     override fun loadWordAllInfo(word: String) {
         model.getWordTranslateInfo(word)

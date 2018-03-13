@@ -14,7 +14,8 @@ public interface SearchStoreContract {
         void showSearchList(List<WordMain> wordMains);
     }
     interface Presenter{
-        void searchbuttonclick(int spinnerposition,Calendar startDay,Calendar endDay);
+        void searchPeriod(Calendar startDay,Calendar endDay);
+        void searchToday();
+        void searchAll();
     }
-
 }

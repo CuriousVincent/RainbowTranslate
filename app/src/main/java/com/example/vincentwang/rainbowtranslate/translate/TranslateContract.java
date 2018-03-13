@@ -21,10 +21,9 @@ public interface TranslateContract {
         void loadWordAllInfo(String word);
     }
     interface Model{
-
         Flowable<ArrayList<WordTotalInfo>> getWordTranslateInfo(String word);
-
-        Flowable<ArrayList<WordMain>> getWordMain(int spinnerposition, Calendar startDay, Calendar endDay);
-
+        Flowable<ArrayList<WordMain>> getWordMainPeriod(Calendar startDay, Calendar endDay);
+        Flowable<ArrayList<WordMain>> getWordMainToday();
+        Flowable<ArrayList<WordMain>> getWordMainAll();
     }
 }

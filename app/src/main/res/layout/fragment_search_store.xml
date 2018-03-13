@@ -22,7 +22,8 @@
         android:layout_marginEnd="5dp"
         android:padding="8dp"
         android:visibility="gone"
-        android:text="@string/starting_day"
+        android:text=""
+        android:hint="@string/starting_day"
         android:textSize="18sp"
         />
     <TextView
@@ -34,7 +35,8 @@
         android:visibility="gone"
         android:padding="8dp"
         android:textSize="18sp"
-        android:text="@string/ending_day"
+        android:text=""
+        android:hint="@string/ending_day"
         />
     <Button
         android:id="@+id/button_confirm"
