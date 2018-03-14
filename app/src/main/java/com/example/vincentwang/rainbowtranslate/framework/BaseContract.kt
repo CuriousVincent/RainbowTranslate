@@ -7,6 +7,8 @@ interface BaseContract {
     interface View : ProgressbarListener {
         fun gotoTranslateFragment(word: String)
         fun gotoSearchStoreFragment()
+        fun showDialog(title:Int,message:Int)
+        fun showDialog(title:String,message: String)
     }
 
     interface Presenter {

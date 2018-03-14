@@ -5,6 +5,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.ProgressBar
 import com.example.vincentwang.rainbowtranslate.R
+import com.example.vincentwang.rainbowtranslate.util.DialogUtils
 
 /**
  * Created by vincentwang on 2017/8/17.
@@ -32,5 +33,13 @@ abstract class BaseActivity : AppCompatActivity(),BaseContract.View {
 
     override fun hideProgressBar() {
         showProgressBar(false)
+    }
+
+    override fun showDialog(title: Int, message: Int) {
+        DialogUtils.showDialog(this,title,message).subscribe()
+    }
+
+    override fun showDialog(title: String, message: String) {
+        DialogUtils.showDialog(this,title,message).subscribe()
     }
 }

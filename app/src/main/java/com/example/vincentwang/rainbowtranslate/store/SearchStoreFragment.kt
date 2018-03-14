@@ -72,7 +72,7 @@ class SearchStoreFragment : BaseFragment(), SearchStoreContract.View, View.OnCli
             }
         }
 
-        var mLayoutManager = LinearLayoutManager(context)
+        val mLayoutManager = LinearLayoutManager(context)
         recyclerview_store_word_list.layoutManager = mLayoutManager
 
         searchStoreAdapter = SearchStoreAdapter({ word ->
@@ -89,20 +89,15 @@ class SearchStoreFragment : BaseFragment(), SearchStoreContract.View, View.OnCli
         when (view.id) {
             R.id.text_startDay -> showDateDailog(DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
                 startday = ToolUtils.setCalendarByDate(year, month, day)
-                val myFormat = "yyyy/MM/dd" //In which you need put here
-                val sdf = SimpleDateFormat(myFormat, Locale.TAIWAN)
+                val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.TAIWAN)
                 text_startDay!!.text = sdf.format(startday!!.time)
-                text_endDay!!.setText(R.string.ending_day)
-                button_confirm.isEnabled = false
+                button_confirm.isEnabled = text_endDay!!.text.toString() != ""
             })
             R.id.text_endDay -> showDateDailog(DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
                 endday = ToolUtils.setCalendarByDate(year, month, day)
-                val myFormat = "yyyy/MM/dd" //In which you need put here
-                val sdf = SimpleDateFormat(myFormat, Locale.TAIWAN)
+                val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.TAIWAN)
                 text_endDay!!.text = sdf.format(endday!!.time)
-                if (text_startDay!!.text.toString() != "") {
-                    button_confirm.isEnabled = true
-                }
+                button_confirm.isEnabled = text_startDay!!.text.toString() != ""
             })
             R.id.button_confirm ->
             {

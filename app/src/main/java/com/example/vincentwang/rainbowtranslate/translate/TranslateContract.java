@@ -2,6 +2,7 @@ package com.example.vincentwang.rainbowtranslate.translate;
 
 import com.example.vincentwang.rainbowtranslate.data.WordMain;
 import com.example.vincentwang.rainbowtranslate.data.WordTotalInfo;
+import com.example.vincentwang.rainbowtranslate.framework.BaseContract;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,7 +15,7 @@ import io.reactivex.Flowable;
  */
 
 public interface TranslateContract {
-    interface View{
+    interface View extends BaseContract.View{
         void showWordTranslateInfo(List<WordTotalInfo> wordTotalInfos);
     }
     interface Presneter{

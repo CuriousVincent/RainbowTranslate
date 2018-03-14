@@ -9,7 +9,7 @@ import java.util.*
  * Created by vincentwang on 2017/8/18.
  */
 
-class TranslatePresenter(val view: TranslateContract.View,val model: TranslateContract.Model) : BasePresenter(), TranslateContract.Presneter {
+class TranslatePresenter(val view: TranslateContract.View, val model: TranslateContract.Model) : BasePresenter(), TranslateContract.Presneter {
 
     override fun loadWordAllInfo(word: String) {
         model.getWordTranslateInfo(word)
@@ -20,7 +20,7 @@ class TranslatePresenter(val view: TranslateContract.View,val model: TranslateCo
                     }
 
                     override fun onError(t: Throwable) {
-
+                        view.showDialog("警告", "查無資料")
                     }
 
                     override fun onComplete() {

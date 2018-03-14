@@ -27,6 +27,8 @@ public class ToolUtils {
         return mCalendar;
     }
 
+
+
     public static void rmRepeadtedElementByOrder(List<WordMain> list) {
         LinkedHashSet<WordMain> loadsSet = new LinkedHashSet<WordMain>(list);
         ArrayList<WordMain> loadsList = new ArrayList<WordMain>(loadsSet);
