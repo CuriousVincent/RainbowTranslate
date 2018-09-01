@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.vincentwang.rainbowtranslate.store.SearchStoreFragment">
+    tools:context="com.mvp.vincentwang.rainbowtranslate.store.SearchStoreFragment">
 
     <Spinner
         android:id="@+id/spinner_store_period"

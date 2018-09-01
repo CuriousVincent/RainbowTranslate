@@ -12,6 +12,9 @@
     <string name="note">紀錄</string>
     <string name="setting">設定</string>
     <string name="confirm">確認</string>
+    <string name="warning">警告</string>
+    <string name="dataError">查無資料</string>
+    <string name="datePeriodError">日期錯誤</string>
 
 
     <string-array name="store_type_spinner_text">

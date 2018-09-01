@@ -12,6 +12,10 @@
     <string name="note">Notes</string>
     <string name="setting">Setting</string>
     <string name="confirm">Confirm</string>
+    <string name="warning">Warning</string>
+    <string name="dataError">No Data</string>
+    <string name="datePeriodError">Wrong Date Period</string>
+
 
     <string-array name="store_type_spinner_text">
         <item>today</item>

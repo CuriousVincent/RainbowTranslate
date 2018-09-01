@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.vincentwang.rainbowtranslate.translate.TranslateFragment">
+    tools:context="com.mvp.vincentwang.rainbowtranslate.translate.TranslateFragment">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_translate"
         android:layout_width="match_parent"

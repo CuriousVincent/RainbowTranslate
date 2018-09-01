@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1087104983238",
+    "firebase_url": "https://rainbowtranslate-publish.firebaseio.com",
+    "project_id": "rainbowtranslate-publish",
+    "storage_bucket": "rainbowtranslate-publish.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087104983238:android:996ce4056e1470d2",
+        "android_client_info": {
+          "package_name": "com.mvp.vincentwang.rainbowtranslate.publish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087104983238-1e7eingpmlg3k3lakr77ph03n12vh3ls.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCvxD62IbTpT1IhzizMlMrb7BwzoIu6eI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

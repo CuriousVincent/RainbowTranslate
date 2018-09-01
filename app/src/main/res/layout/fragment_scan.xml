@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.vincentwang.rainbowtranslate.scan.ScanFragment">
+    tools:context="com.mvp.vincentwang.rainbowtranslate.scan.ScanFragment">
     <SurfaceView android:id="@+id/preview_view"
         android:layout_width="wrap_content"
         android:layout_height="360dp"
