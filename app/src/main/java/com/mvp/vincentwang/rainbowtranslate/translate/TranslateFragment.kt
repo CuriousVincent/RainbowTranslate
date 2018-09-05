@@ -75,9 +75,10 @@ class TranslateFragment : BaseFragment(), FloatingSearchView.OnQueryChangeListen
         presenter.loadWordAllInfo(word)
     }
 
-    override fun showWordTranslateInfo(wordTotalInfos: List<WordTotalInfo>) {
+    override fun showWordTranslateInfo(word:String,wordTotalInfos: List<WordTotalInfo>) {
         this.wordTotalInfos = wordTotalInfos
-        translateAdapter.setWordTotalInfo(wordTotalInfos)
+        this.word =word
+        translateAdapter.setWordTotalInfo(word,wordTotalInfos)
     }
 
     override fun onStop() {

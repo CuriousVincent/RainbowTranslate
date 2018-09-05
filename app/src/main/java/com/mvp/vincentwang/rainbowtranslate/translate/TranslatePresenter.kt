@@ -16,7 +16,7 @@ class TranslatePresenter(val view: TranslateContract.View, val model: TranslateC
                 .compose(applySchedulers())
                 .subscribeWith(object : ResourceSubscriber<ArrayList<WordTotalInfo>>() {
                     override fun onNext(wordTotalInfos: ArrayList<WordTotalInfo>) {
-                        view.showWordTranslateInfo(wordTotalInfos)
+//                        view.showWordTranslateInfo(wordTotalInfos)
                     }
 
                     override fun onError(t: Throwable) {
@@ -33,7 +33,9 @@ class TranslatePresenter(val view: TranslateContract.View, val model: TranslateC
                 .compose(applySchedulers())
                 .subscribeWith(object : ResourceSubscriber<ArrayList<WordTotalInfo>>() {
                     override fun onNext(wordTotalInfos: ArrayList<WordTotalInfo>) {
-                        view.showWordTranslateInfo(wordTotalInfos)
+                        if (word != null) {
+                            view.showWordTranslateInfo(word,wordTotalInfos)
+                        }
                     }
 
                     override fun onError(t: Throwable) {

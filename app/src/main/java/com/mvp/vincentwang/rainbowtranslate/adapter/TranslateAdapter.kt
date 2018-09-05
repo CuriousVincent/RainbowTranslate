@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.item_translate_result.view.*
 class TranslateAdapter : RecyclerView.Adapter<TranslateAdapter.ViewHolder>() {
 
     internal var wordTotalInfos: List<WordTotalInfo>? = null
-
+    internal var word :String?=null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -27,7 +27,7 @@ class TranslateAdapter : RecyclerView.Adapter<TranslateAdapter.ViewHolder>() {
         if (wordTotalInfos != null) {
             val wordTotalInfo = wordTotalInfos!![position]
 
-            holder.textWord!!.text = wordTotalInfo.word.word
+            holder.textWord!!.text = word
             holder.textType!!.text = wordTotalInfo.wordInfo.type
             holder.textWordChinesemean!!.text = wordTotalInfo.wordInfo.chinesemean
             holder.textWordEnglishmean!!.text = wordTotalInfo.wordInfo.englishmean
@@ -49,7 +49,8 @@ class TranslateAdapter : RecyclerView.Adapter<TranslateAdapter.ViewHolder>() {
         }
     }
 
-    fun setWordTotalInfo(wordTotalInfos: List<WordTotalInfo>) {
+    fun setWordTotalInfo(word:String,wordTotalInfos: List<WordTotalInfo>) {
+        this.word=word
         this.wordTotalInfos = wordTotalInfos
         notifyDataSetChanged()
     }

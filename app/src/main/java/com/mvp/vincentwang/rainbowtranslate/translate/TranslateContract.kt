@@ -12,7 +12,7 @@ import java.util.*
 
 interface TranslateContract {
     interface View : BaseContract.View {
-        fun showWordTranslateInfo(wordTotalInfos: List<WordTotalInfo>)
+        fun showWordTranslateInfo(word:String,wordTotalInfos: List<WordTotalInfo>)
     }
 
     interface Presneter:BaseContract.Presenter {
