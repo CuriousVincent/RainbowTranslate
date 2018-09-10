@@ -1,9 +1,9 @@
 package com.mvp.vincentwang.rainbowtranslate.store
 
+import com.mvp.vincentwang.rainbowtranslate.Model
 import com.mvp.vincentwang.rainbowtranslate.R
-import com.mvp.vincentwang.rainbowtranslate.data.WordMain
 import com.mvp.vincentwang.rainbowtranslate.framework.BasePresenter
-import com.mvp.vincentwang.rainbowtranslate.translate.TranslateContract
+import com.mvp.vincentwang.rainbowtranslate.room.data.WordMain
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableOnSubscribe
@@ -16,7 +16,7 @@ import java.util.*
  * Created by vincentwang on 2017/8/27.
  */
 
-class SearchStorePresenter(var view: SearchStoreContract.View, var model: TranslateContract.Model) : BasePresenter(), SearchStoreContract.Presenter {
+class SearchStorePresenter(var view: SearchStoreContract.View, var model: Model) : BasePresenter(), SearchStoreContract.Presenter {
     override fun searchStoreWord(word: String) {
         model?.setSearchWord(word)
         view.gotoTranslateFragment()
@@ -39,8 +39,8 @@ class SearchStorePresenter(var view: SearchStoreContract.View, var model: Transl
                     model.getWordMainPeriod(startDay, endDay)
                 }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : ResourceSubscriber<ArrayList<WordMain>>() {
-                    override fun onNext(wordMains: ArrayList<WordMain>) {
+                .subscribeWith(object : ResourceSubscriber<List<WordMain>>() {
+                    override fun onNext(wordMains: List<WordMain>) {
                         view.showSearchList(wordMains)
                     }
 
@@ -55,10 +55,10 @@ class SearchStorePresenter(var view: SearchStoreContract.View, var model: Transl
     }
 
     override fun searchToday() {
-        model.wordMainToday
+        model.wordMainToday()
                 .compose(applySchedulers())
-                .subscribeWith(object : ResourceSubscriber<ArrayList<WordMain>>() {
-                    override fun onNext(wordMains: ArrayList<WordMain>) {
+                .subscribeWith(object : ResourceSubscriber<List<WordMain>>() {
+                    override fun onNext(wordMains: List<WordMain>) {
                         view.showSearchList(wordMains)
                     }
 
@@ -74,10 +74,10 @@ class SearchStorePresenter(var view: SearchStoreContract.View, var model: Transl
 
     override fun searchAll() {
         compositeDisposable.add(
-        model.wordMainAll
+        model.wordMainAll()
                 .compose(applySchedulers())
-                .subscribeWith(object : ResourceSubscriber<ArrayList<WordMain>>() {
-                    override fun onNext(wordMains: ArrayList<WordMain>) {
+                .subscribeWith(object : ResourceSubscriber<List<WordMain>>() {
+                    override fun onNext(wordMains: List<WordMain>) {
                         view.showSearchList(wordMains)
                     }
 

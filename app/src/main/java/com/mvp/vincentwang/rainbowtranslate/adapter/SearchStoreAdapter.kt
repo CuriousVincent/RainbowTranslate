@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mvp.vincentwang.rainbowtranslate.R
-import com.mvp.vincentwang.rainbowtranslate.data.WordMain
+import com.mvp.vincentwang.rainbowtranslate.room.data.WordMain
 import kotlinx.android.synthetic.main.item_search_store_result.view.*
 
 /**

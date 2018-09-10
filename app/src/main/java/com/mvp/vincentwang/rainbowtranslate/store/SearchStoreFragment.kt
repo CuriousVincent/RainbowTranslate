@@ -10,9 +10,9 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.mvp.vincentwang.rainbowtranslate.R
 import com.mvp.vincentwang.rainbowtranslate.adapter.SearchStoreAdapter
-import com.mvp.vincentwang.rainbowtranslate.data.WordMain
 import com.mvp.vincentwang.rainbowtranslate.factory.ServiceFactory
 import com.mvp.vincentwang.rainbowtranslate.framework.BaseFragment
+import com.mvp.vincentwang.rainbowtranslate.room.data.WordMain
 import com.mvp.vincentwang.rainbowtranslate.util.ToolUtils
 import kotlinx.android.synthetic.main.fragment_search_store.*
 import java.text.SimpleDateFormat

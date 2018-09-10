@@ -1,6 +1,7 @@
 package com.mvp.vincentwang.rainbowtranslate.util;
 
-import com.mvp.vincentwang.rainbowtranslate.data.WordMain;
+
+import com.mvp.vincentwang.rainbowtranslate.room.data.WordMain;
 
 import java.util.ArrayList;
 import java.util.Calendar;

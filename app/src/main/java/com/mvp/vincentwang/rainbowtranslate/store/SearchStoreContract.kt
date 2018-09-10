@@ -1,7 +1,7 @@
 package com.mvp.vincentwang.rainbowtranslate.store
 
-import com.mvp.vincentwang.rainbowtranslate.data.WordMain
 import com.mvp.vincentwang.rainbowtranslate.framework.BaseContract
+import com.mvp.vincentwang.rainbowtranslate.room.data.WordMain
 import java.util.*
 
 /**

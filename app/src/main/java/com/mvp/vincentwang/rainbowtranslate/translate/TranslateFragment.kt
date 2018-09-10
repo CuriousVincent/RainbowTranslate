@@ -12,15 +12,15 @@ import com.arlib.floatingsearchview.FloatingSearchView
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion
 import com.mvp.vincentwang.rainbowtranslate.R
 import com.mvp.vincentwang.rainbowtranslate.adapter.TranslateAdapter
-import com.mvp.vincentwang.rainbowtranslate.data.WordTotalInfo
 import com.mvp.vincentwang.rainbowtranslate.factory.ServiceFactory
 import com.mvp.vincentwang.rainbowtranslate.framework.BaseFragment
+import com.mvp.vincentwang.rainbowtranslate.room.data.WordTotalInfo
 import kotlinx.android.synthetic.main.fragment_translate.*
 
 
 /**
  * A simple [Fragment] subclass.
- * Use the [TranslateFragment.newInstance] factory method to
+ * Use the [TranslateFragment.newInstance] com.mvp.vincentwang.rainbowtranslate.factory method to
  * create an instance of this fragment.
  */
 class TranslateFragment : BaseFragment(), FloatingSearchView.OnQueryChangeListener, FloatingSearchView.OnHomeActionClickListener, FloatingSearchView.OnSearchListener, TranslateContract.View {
@@ -55,7 +55,7 @@ class TranslateFragment : BaseFragment(), FloatingSearchView.OnQueryChangeListen
 
         recyclerview_translate.adapter = translateAdapter
 
-        presenter.loadWordAllInfoByStore()
+//        presenter.loadWordAllInfoByStore()
     }
 
 
