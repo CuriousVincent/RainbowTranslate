@@ -47,164 +47,30 @@ public class TranslateModel implements Model {
         this.appDbHelper = appDbHelper;
     }
 
-    private ArrayList<WordTotalInfo> getWordTotalInfo(com.mvp.vincentwang.rainbowtranslate.room.data.WordMain wordMain) {
-        return null;
-//        ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordTotalInfo> wordTotalInfos = new ArrayList<>();
-//        String wordid = wordMain.getWordid();
-//        ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordInfo> wordInfolist = getWordInfobyWordId(wordid);
-//        if (wordInfolist != null) {
-//            for (com.mvp.vincentwang.rainbowtranslate.room.data.WordInfo wordInfo : wordInfolist) {
-//                String wordinfoid = wordInfo.getWordinfoid();
-//                List<com.mvp.vincentwang.rainbowtranslate.room.data.WordExample> wordexlist = getWordExamplesbyWordInfoId(wordinfoid);
-//                com.mvp.vincentwang.rainbowtranslate.room.data.WordTotalInfo wordTotalInfo = new com.mvp.vincentwang.rainbowtranslate.room.data.WordTotalInfo();
-//                wordTotalInfo.setWord(wordMain);
-//                wordTotalInfo.setWordInfo(wordInfo);
-//                wordTotalInfo.setWordExamples(wordexlist);
-//                wordTotalInfos.add(wordTotalInfo);
-//            }
-//        }
-//        return wordTotalInfos;
-    }
-
-    private List<WordMain> getWordMainbyWord(String word) {
-        return null;
-//        QueryBuilder<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain> wordquery = wordMainDao.queryBuilder();
-//        wordquery.where(WordMainDao.Properties.Word.eq(word));
-//        List<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain> wordmainlist = wordquery.list();
-//        return wordmainlist;
-    }
-
-    private List<WordMain> getWordMainbyWordId(String wordid) {
-        return null;
-//        QueryBuilder<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain> wordquery = wordMainDao.queryBuilder();
-//        wordquery.where(WordMainDao.Properties.Wordid.eq(wordid));
-//        List<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain> wordmainlist = wordquery.list();
-//        return wordmainlist;
-
-    }
-
-    private ArrayList<WordInfo> getWordInfobyWordId(String wordid) {
-//        QueryBuilder<WordInfo> wordinfoquery = wordInfoDao.queryBuilder();
-//        wordinfoquery.where(WordInfoDao.Properties.Wordid.eq(wordid));
-//        ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordInfo> wordInfolist = new ArrayList<>(wordinfoquery.list());
-//        return wordInfolist;
-        return null;
-    }
-
-    private List<WordExample> getWordExamplesbyWordInfoId(String wordinfoid) {
-//        QueryBuilder<com.mvp.vincentwang.rainbowtranslate.room.data.WordExample> wordexquery = wordExampleDao.queryBuilder();
-//        wordexquery.where(WordExampleDao.Properties.Wordinfoid.eq(wordinfoid));
-//        List<com.mvp.vincentwang.rainbowtranslate.room.data.WordExample> wordexlist = wordexquery.list();
-//        return wordexlist;
-        return null;
-    }
-
-    private ArrayList<WordMain> getWordMain() {
-//        ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain> wordmainlist = new ArrayList<>(wordMainDao.loadAll());
-//        return wordmainlist;
-        return null;
-    }
-
-    private List<SearchTime> getTodaySearchTime() {
-//        List<com.mvp.vincentwang.rainbowtranslate.room.data.SearchTime> searchTimes = queryOneDayData(searchTimeDao.queryBuilder(), SearchTimeDao.Properties.Searchtime, new Date());
-//        return searchTimes;
-        return null;
-    }
-
-    private List<SearchTime> getPeriodDateSearchTime(Calendar startDay, Calendar endDay) {
-//        List<com.mvp.vincentwang.rainbowtranslate.room.data.SearchTime> searchTimes = queryPeriodDateData(searchTimeDao.queryBuilder(), SearchTimeDao.Properties.Searchtime, startDay, endDay);
-//        return searchTimes;
-        return null;
-    }
-
-    private ArrayList<WordMain> getWordMain(List<com.mvp.vincentwang.rainbowtranslate.room.data.SearchTime> searchTimes) {
-//        ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain> wordMains = new ArrayList<>();
-//        for (int time = searchTimes.size() - 1; time >= 0; time--) {
-//            wordMains.add(getWordMainbyWordId(searchTimes.get(time).getWordid()).get(0));
-//        }
-//        ToolUtils.rmRepeadtedElementByOrder(wordMains);
-//        return wordMains;
-        return null;
-    }
-
-
     @Override
     public Flowable<List<WordMain>> getWordMainPeriod(final Calendar startDay, final Calendar endDay) {
-//        return Flowable.create(new FlowableOnSubscribe<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain>>() {
-//            @Override
-//            public void subscribe(FlowableEmitter<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain>> e) throws Exception {
-//                ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain> wordMains = getWordMain(getPeriodDateSearchTime(startDay, endDay));
-//
-//                if (wordMains != null) {
-//                    e.onNext(wordMains);
-//                } else {
-//                    e.onError(new Exception());
-//                }
-//            }
-//        }, BackpressureStrategy.BUFFER);
-        return null;
+        return appDbHelper.findWordMainBetweenDates(startDay.getTime(),endDay.getTime()).toFlowable();
+
     }
 
     @Override
     public Flowable<List<WordMain>> wordMainToday() {
-//        return Flowable.create(new FlowableOnSubscribe<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain>>() {
-//            @Override
-//            public void subscribe(FlowableEmitter<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain>> e) throws Exception {
-//                ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain> wordMains = getWordMain(getTodaySearchTime());
-//                if (wordMains != null) {
-//                    e.onNext(wordMains);
-//                } else {
-//                    e.onError(new Exception());
-//                }
-//            }
-//        }, BackpressureStrategy.BUFFER);
-        return null;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR, 0);
+        Date today = calendar.getTime();
+        calendar.add(Calendar.DATE,1);
+        Date next = calendar.getTime();
+        return appDbHelper.findWordMainBetweenDates(today,next).toFlowable();
     }
 
     @Override
     public Flowable<List<WordMain>> wordMainAll() {
-//        return Flowable.create(new FlowableOnSubscribe<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain>>() {
-//            @Override
-//            public void subscribe(FlowableEmitter<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain>> e) throws Exception {
-//                ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain> wordMains = getWordMain();
-//                if (wordMains != null) {
-//                    e.onNext(wordMains);
-//                } else {
-//                    e.onError(new Exception());
-//                }
-//            }
-//        }, BackpressureStrategy.BUFFER);
-        return null;
+        return appDbHelper.findAllWordMain().toFlowable();
     }
-
-
-//    //取得某天的所有資料
-//    private <T> List<T> queryOneDayData(QueryBuilder<T> builder, Property dateProperty, Date date) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(date);
-//        calendar.set(Calendar.MILLISECOND, 0);
-//        calendar.set(Calendar.SECOND, 0);
-//        calendar.set(Calendar.MINUTE, 0);
-//        calendar.set(Calendar.HOUR, 0);
-//        List<T> queryList = queryPeriodDateData(builder, dateProperty, calendar, calendar);
-//
-//
-////        Date today = calendar.getTime();
-////        calendar.add(Calendar.DAY_OF_MONTH,1);
-////        Date nextDay = calendar.getTime();
-////        List<T> queryList = builder.where(builder.and(dateProperty.ge(today), dateProperty.lt(nextDay))).list();
-//        return queryList;
-//    }
-
-//    private <T> List<T> queryPeriodDateData(QueryBuilder<T> builder, Property dateProperty, Calendar startDate, Calendar endDate) {
-//        Calendar startcalendar = startDate;
-//        Date startDay = startcalendar.getTime();
-//        Calendar endcalendar = endDate;
-//        endcalendar.add(Calendar.DAY_OF_MONTH, 1);
-//        Date endDay = endcalendar.getTime();
-//        List<T> queryList = builder.where(builder.and(dateProperty.ge(startDay), dateProperty.lt(endDay))).list();
-//        return queryList;
-//    }
 
     @Override
     public void setSearchWord(@org.jetbrains.annotations.NotNull String word) {
@@ -241,7 +107,7 @@ public class TranslateModel implements Model {
     @Override
     public Flowable<List<WordTotalInfo>> getWordTranslateInfo(@Nullable final String word) {
 
-        return appDbHelper.getWordMainByWordMain(word)
+        return appDbHelper.getWordMainByWord(word)
                 .flatMap(new Function<List<WordMain>, SingleSource<List<WordTotalInfo>>>() {
                     @Override
                     public SingleSource<List<WordTotalInfo>> apply(List<WordMain> wordMains) throws Exception {
