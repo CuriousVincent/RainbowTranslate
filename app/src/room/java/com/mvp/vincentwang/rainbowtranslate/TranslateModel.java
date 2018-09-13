@@ -163,6 +163,7 @@ public class TranslateModel implements Model {
 
     @Override
     public Flowable<List<WordMain>> wordMainAll() {
+        return appDbHelper.getWordMainAll().toFlowable();
 //        return Flowable.create(new FlowableOnSubscribe<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain>>() {
 //            @Override
 //            public void subscribe(FlowableEmitter<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain>> e) throws Exception {
@@ -174,7 +175,6 @@ public class TranslateModel implements Model {
 //                }
 //            }
 //        }, BackpressureStrategy.BUFFER);
-        return null;
     }
 
 
@@ -214,7 +214,7 @@ public class TranslateModel implements Model {
     @org.jetbrains.annotations.NotNull
     @Override
     public Flowable<List<WordTotalInfo>> getStoreWordTranslateInfo() {
-        
+
 //        return Flowable.create(new FlowableOnSubscribe<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordTotalInfo>>() {
 //            @Override
 //            public void subscribe(FlowableEmitter<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordTotalInfo>> e) throws Exception {
@@ -241,7 +241,7 @@ public class TranslateModel implements Model {
     @Override
     public Flowable<List<WordTotalInfo>> getWordTranslateInfo(@Nullable final String word) {
 
-        return appDbHelper.getWordMainByWordMain(word)
+        return appDbHelper.getWordMainByWord(word)
                 .flatMap(new Function<List<WordMain>, SingleSource<List<WordTotalInfo>>>() {
                     @Override
                     public SingleSource<List<WordTotalInfo>> apply(List<WordMain> wordMains) throws Exception {

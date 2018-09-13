@@ -56,19 +56,17 @@ public class AppDbHelper implements DbHelper {
                 return true;
             }
         });
-//        return Observable.fromCallable(new Callable<Boolean>() {
-//            @Override
-//            public Boolean call() throws Exception {
-//                mAppDatabase.searchTimeDao().insert(searchTime);
-//                return true;
-//            }
-//        });
     }
 
 
     @Override
-    public Single<List<WordMain>> getWordMainByWordMain(String word) {
+    public Single<List<WordMain>> getWordMainByWord(String word) {
         return mAppDatabase.wordMainDao().loadByword(word);
+    }
+
+    @Override
+    public Single<List<WordMain>> getWordMainAll() {
+        return mAppDatabase.wordMainDao().loadAll();
     }
 
     @Override

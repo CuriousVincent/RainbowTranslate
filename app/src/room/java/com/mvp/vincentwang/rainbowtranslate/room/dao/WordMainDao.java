@@ -19,6 +19,9 @@ public interface WordMainDao {
     @Query("SELECT * FROM WordMain WHERE word IN (:word)")
     Single<List<WordMain>> loadByword(String word);
 
+    @Query("SELECT * FROM WordMain")
+    Single<List<WordMain>> loadAll();
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(WordMain wordMain);
 
