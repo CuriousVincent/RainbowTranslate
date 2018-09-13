@@ -6,6 +6,7 @@ import com.mvp.vincentwang.rainbowtranslate.room.data.WordInfo;
 import com.mvp.vincentwang.rainbowtranslate.room.data.WordMain;
 import com.mvp.vincentwang.rainbowtranslate.room.data.WordTotalInfo;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -28,13 +29,6 @@ public class AppDbHelper implements DbHelper {
                 return true;
             }
         });
-//        return Observable.fromCallable(new Callable<Boolean>() {
-//            @Override
-//            public Boolean call() throws Exception {
-//                mAppDatabase.wordMainDao().insert(wordMain);
-//                return true;
-//            }
-//        });
     }
 
     @Override
@@ -72,6 +66,16 @@ public class AppDbHelper implements DbHelper {
     @Override
     public Single<List<WordTotalInfo>> getWordTotalInfoByWordid(String wordid) {
         return mAppDatabase.wordInfoDao().loadAllByIds(wordid);
+    }
+
+    @Override
+    public Single<List<WordMain>> findWordMainBetweenDates(Date from, Date to) {
+        return mAppDatabase.wordMainDao().findWordMainBetweenDates(from,to);
+    }
+
+    @Override
+    public Single<List<WordMain>> findAllWordMain() {
+        return mAppDatabase.wordMainDao().loadAll();
     }
 
 
