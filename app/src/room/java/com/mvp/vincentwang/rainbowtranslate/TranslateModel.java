@@ -71,7 +71,18 @@ public class TranslateModel implements Model {
 
     @Override
     public Flowable<List<WordMain>> wordMainAll() {
-        return appDbHelper.findAllWordMain().toFlowable();
+        return appDbHelper.getWordMainAll().toFlowable();
+//        return Flowable.create(new FlowableOnSubscribe<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain>>() {
+//            @Override
+//            public void subscribe(FlowableEmitter<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain>> e) throws Exception {
+//                ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain> wordMains = getWordMain();
+//                if (wordMains != null) {
+//                    e.onNext(wordMains);
+//                } else {
+//                    e.onError(new Exception());
+//                }
+//            }
+//        }, BackpressureStrategy.BUFFER);
     }
 
     @Override
@@ -82,7 +93,7 @@ public class TranslateModel implements Model {
     @org.jetbrains.annotations.NotNull
     @Override
     public Flowable<List<WordTotalInfo>> getStoreWordTranslateInfo() {
-        
+
 //        return Flowable.create(new FlowableOnSubscribe<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordTotalInfo>>() {
 //            @Override
 //            public void subscribe(FlowableEmitter<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordTotalInfo>> e) throws Exception {

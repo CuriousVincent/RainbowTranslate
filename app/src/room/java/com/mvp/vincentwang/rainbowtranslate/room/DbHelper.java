@@ -18,7 +18,7 @@ public interface DbHelper {
     void insertWordExample(final WordExample wordExample);
     Single<Boolean> insertSearchTime(final SearchTime searchTime);
     Single<List<WordMain>> getWordMainByWord(String word);
+    Single<List<WordMain>> getWordMainAll();
     Single<List<WordTotalInfo>> getWordTotalInfoByWordid(String wordid);
     Single<List<WordMain>> findWordMainBetweenDates(Date from, Date to);
-    Single<List<WordMain>> findAllWordMain();
 }

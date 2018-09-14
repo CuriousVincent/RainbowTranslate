@@ -70,6 +70,11 @@ public class AppDbHelper implements DbHelper {
     }
 
     @Override
+    public Single<List<WordMain>> getWordMainAll() {
+        return mAppDatabase.wordMainDao().loadAll();
+    }
+
+    @Override
     public Single<List<WordTotalInfo>> getWordTotalInfoByWordid(String wordid) {
         return mAppDatabase.wordInfoDao().loadAllByIds(wordid);
     }

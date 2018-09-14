@@ -24,7 +24,6 @@ public interface WordMainDao {
     @Query("SELECT * FROM WordMain w INNER JOIN SearchTime s ON w.wordid = s.wordid WHERE s.searchtime BETWEEN :from AND :to group by w.wordid")
     Single<List<WordMain>> findWordMainBetweenDates(Date from, Date to);
 
-
     @Query("SELECT * FROM WordMain")
     Single<List<WordMain>> loadAll();
 
