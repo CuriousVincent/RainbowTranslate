@@ -18,7 +18,7 @@ import java.util.*
 
 class SearchStorePresenter(var view: SearchStoreContract.View, var model: Model) : BasePresenter(), SearchStoreContract.Presenter {
     override fun searchStoreWord(word: String) {
-        model?.setSearchWord(word)
+        model.setSearchWord(word)
         view.gotoTranslateFragment()
     }
 
@@ -74,20 +74,20 @@ class SearchStorePresenter(var view: SearchStoreContract.View, var model: Model)
 
     override fun searchAll() {
         compositeDisposable.add(
-        model.wordMainAll()
-                .compose(applySchedulers())
-                .subscribeWith(object : ResourceSubscriber<List<WordMain>>() {
-                    override fun onNext(wordMains: List<WordMain>) {
-                        view.showSearchList(wordMains)
-                    }
+                model.wordMainAll()
+                        .compose(applySchedulers())
+                        .subscribeWith(object : ResourceSubscriber<List<WordMain>>() {
+                            override fun onNext(wordMains: List<WordMain>) {
+                                view.showSearchList(wordMains)
+                            }
 
-                    override fun onError(t: Throwable) {
-                        view.showDialog(R.string.warning, R.string.dataError)
-                    }
+                            override fun onError(t: Throwable) {
+                                view.showDialog(R.string.warning, R.string.dataError)
+                            }
 
-                    override fun onComplete() {
+                            override fun onComplete() {
 
-                    }
-                }))
+                            }
+                        }))
     }
 }

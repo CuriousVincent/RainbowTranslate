@@ -17,5 +17,7 @@ interface Model
 
     fun setSearchWord(word: String)
 
+    fun getSearchWord():Flowable<String>
+
     fun getStoreWordTranslateInfo(): Flowable<List<WordTotalInfo>>
 }

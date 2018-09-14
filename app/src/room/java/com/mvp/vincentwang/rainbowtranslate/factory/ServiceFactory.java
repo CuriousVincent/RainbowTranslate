@@ -18,8 +18,8 @@ public class ServiceFactory {
     private static Context sContext;
     private static DBService dbService;
     private static TranslateModel translateModel;
-private static AppDbHelper appDbHelper;
-private static AppDatabase appDatabase;
+    private static AppDbHelper appDbHelper;
+    private static AppDatabase appDatabase;
 
 
     public static void init(Context context) {
@@ -35,19 +35,20 @@ private static AppDatabase appDatabase;
 //        return dbService;
 //    }
 
-    public static Model provideTranslateModel(){
+    public static Model provideTranslateModel() {
         if (translateModel == null) {
             translateModel = new TranslateModel(provideAppDbHelper());
         }
         return translateModel;
     }
 
-    public static AppDbHelper provideAppDbHelper(){
-        if(appDbHelper ==  null){
-            appDbHelper = new AppDbHelper(provideAppDatabase("Translate",sContext));
+    public static AppDbHelper provideAppDbHelper() {
+        if (appDbHelper == null) {
+            appDbHelper = new AppDbHelper(provideAppDatabase("Translate", sContext));
         }
         return appDbHelper;
     }
+
     static AppDatabase provideAppDatabase(String dbName, Context context) {
         return Room.databaseBuilder(context, AppDatabase.class, dbName).fallbackToDestructiveMigration()
                 .build();

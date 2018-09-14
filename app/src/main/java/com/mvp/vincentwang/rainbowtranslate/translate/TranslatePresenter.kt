@@ -12,15 +12,29 @@ import io.reactivex.subscribers.ResourceSubscriber
  */
 
 class TranslatePresenter(val view: TranslateContract.View, val model: Model) : BasePresenter(), TranslateContract.Presneter {
-    override fun loadWordAllInfoByStore() {
-        model.getStoreWordTranslateInfo()
+    override fun loadWordAllInfoByStore()
+    {
+        var word =""
+        model.getSearchWord()
+                .filter{ t->
+                    var result =false
+                    if(t != "") {
+                        result = true
+                    }
+                    word = t
+                    result
+                }
+                .flatMap { t ->
+                    model.getStoreWordTranslateInfo()
+                }
                 .compose(applySchedulers())
                 .subscribeWith(object : ResourceSubscriber<List<WordTotalInfo>>() {
                     override fun onNext(wordTotalInfos: List<WordTotalInfo>) {
-//                        view.showWordTranslateInfo(wordTotalInfos)
+                        view.showWordTranslateInfo(word,wordTotalInfos)
                     }
 
                     override fun onError(t: Throwable) {
+                        view.showDialog(R.string.warning, R.string.dataError)
                     }
 
                     override fun onComplete() {
@@ -30,13 +44,12 @@ class TranslatePresenter(val view: TranslateContract.View, val model: Model) : B
     }
 
     override fun loadWordAllInfo(word: String?) {
-//model.test(word!!)
         model.getWordTranslateInfo(word)
                 .compose(applySchedulers())
                 .subscribeWith(object : ResourceSubscriber<List<WordTotalInfo>>() {
                     override fun onNext(wordTotalInfos: List<WordTotalInfo>) {
                         if (word != null) {
-                            view.showWordTranslateInfo(word, wordTotalInfos)
+                            view.showWordTranslateInfo(word,wordTotalInfos)
                         }
                     }
 

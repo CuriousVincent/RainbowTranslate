@@ -13,6 +13,7 @@ import io.reactivex.Single;
 
 public interface DbHelper {
     Single<Boolean> insertWordMain(final WordMain wordMain);
+    Single<Boolean> updateWordMain(final WordMain wordMain);
     void insertWordInfo(final WordInfo wordInfo);
     void insertWordExample(final WordExample wordExample);
     Single<Boolean> insertSearchTime(final SearchTime searchTime);

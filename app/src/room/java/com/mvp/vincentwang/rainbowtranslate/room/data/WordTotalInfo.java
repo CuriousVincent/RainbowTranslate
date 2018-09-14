@@ -33,24 +33,14 @@ public class WordTotalInfo {
     }
 
     @Ignore
-    private Elements ex;
-    @Ignore
-    private Element body;
+    private String word;
 
-    public Elements getEx() {
-        return ex;
+    public String getWord() {
+        return word;
     }
 
-    public void setEx(Elements ex) {
-        this.ex = ex;
-    }
-
-    public Element getBody() {
-        return body;
-    }
-
-    public void setBody(Element body) {
-        this.body = body;
+    public void setWord(String word) {
+        this.word = word;
     }
 }
 

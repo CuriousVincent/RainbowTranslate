@@ -55,7 +55,7 @@ class TranslateFragment : BaseFragment(), FloatingSearchView.OnQueryChangeListen
 
         recyclerview_translate.adapter = translateAdapter
 
-//        presenter.loadWordAllInfoByStore()
+        presenter.loadWordAllInfoByStore()
     }
 
 

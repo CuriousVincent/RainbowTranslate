@@ -32,6 +32,17 @@ public class AppDbHelper implements DbHelper {
     }
 
     @Override
+    public Single<Boolean> updateWordMain(final WordMain wordMain) {
+        return Single.fromCallable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                mAppDatabase.wordMainDao().update(wordMain);
+                return true;
+            }
+        });
+    }
+
+    @Override
     public void insertWordInfo(final WordInfo wordInfo) {
         mAppDatabase.wordInfoDao().insert(wordInfo);
     }

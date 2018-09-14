@@ -33,4 +33,16 @@ public class WordMain {
     public int getTimes() {
         return times;
     }
+
+    public void setWordid(@NonNull String wordid) {
+        this.wordid = wordid;
+    }
+
+    public void setWord(@NonNull String word) {
+        this.word = word;
+    }
+
+    public void setTimes(int times) {
+        this.times = times;
+    }
 }
