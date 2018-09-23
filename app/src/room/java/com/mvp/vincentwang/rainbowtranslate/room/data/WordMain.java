@@ -1,5 +1,6 @@
 package com.mvp.vincentwang.rainbowtranslate.room.data;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
@@ -12,6 +13,7 @@ public class WordMain {
     @NonNull
     private String wordid;
     @NonNull
+    @ColumnInfo(name = "word")
     private String word;
 
     private int times;

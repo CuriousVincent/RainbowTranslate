@@ -19,16 +19,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class SearchStoreFragment : BaseFragment(), SearchStoreContract.View, View.OnClickListener {
+class SearchStoreFragment : BaseFragment(), SearchStoreContract.View, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    val presenter :SearchStoreContract.Presenter by lazy {
+
+    val presenter: SearchStoreContract.Presenter by lazy {
         SearchStorePresenter(this, ServiceFactory.provideTranslateModel()) as SearchStoreContract.Presenter
     }
-
     private lateinit var startday: Calendar
     private lateinit var endday: Calendar
-    private lateinit var searchStoreAdapter: SearchStoreAdapter
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
 
@@ -41,45 +39,42 @@ class SearchStoreFragment : BaseFragment(), SearchStoreContract.View, View.OnCli
                 R.array.store_type_spinner_text,
                 android.R.layout.simple_spinner_dropdown_item)
         spinner_store_period.adapter = spinneradapter
-        spinner_store_period.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(adapterView: AdapterView<*>, view: View, position: Int, l: Long) {
-                when (position) {
-                    0 -> {
-                        text_startDay.visibility = View.GONE
-                        text_endDay.visibility = View.GONE
-                        button_confirm!!.isEnabled = true
-                    }
-                    1 -> {
-                        text_startDay.visibility = View.VISIBLE
-                        text_endDay.visibility = View.VISIBLE
-                        button_confirm.isEnabled = text_startDay.text.toString() != "" && text_endDay.text.toString() != ""
-                    }
-                    2 -> {
-                        text_startDay.visibility = View.GONE
-                        text_endDay.visibility = View.GONE
-                        button_confirm.isEnabled = true
-                    }
-                }
-            }
-
-            override fun onNothingSelected(adapterView: AdapterView<*>) {
-
-            }
-        }
+        spinner_store_period.onItemSelectedListener = this
 
         val mLayoutManager = LinearLayoutManager(context)
         recyclerview_store_word_list.layoutManager = mLayoutManager
 
-        searchStoreAdapter = SearchStoreAdapter({ word ->
+        var searchStoreAdapter = SearchStoreAdapter { word ->
             presenter.searchStoreWord(word)
-        })
+        }
         recyclerview_store_word_list.adapter = searchStoreAdapter
 
         text_startDay.setOnClickListener(this)
         text_endDay.setOnClickListener(this)
         button_confirm.setOnClickListener(this)
     }
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+    }
 
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        when (position) {
+            0 -> {
+                text_startDay.visibility = View.GONE
+                text_endDay.visibility = View.GONE
+                button_confirm!!.isEnabled = true
+            }
+            1 -> {
+                text_startDay.visibility = View.VISIBLE
+                text_endDay.visibility = View.VISIBLE
+                button_confirm.isEnabled = text_startDay.text.toString() != "" && text_endDay.text.toString() != ""
+            }
+            2 -> {
+                text_startDay.visibility = View.GONE
+                text_endDay.visibility = View.GONE
+                button_confirm.isEnabled = true
+            }
+        }
+    }
     override fun onClick(view: View) {
         when (view.id) {
             R.id.text_startDay -> showDateDailog(DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
@@ -114,7 +109,8 @@ class SearchStoreFragment : BaseFragment(), SearchStoreContract.View, View.OnCli
     }
 
     override fun showSearchList(wordMains: List<WordMain>) {
-        searchStoreAdapter.setWordMain(wordMains)
+        val adapter = recyclerview_store_word_list.adapter as SearchStoreAdapter
+        adapter.setWordMain(wordMains)
     }
 
     override fun onStop() {

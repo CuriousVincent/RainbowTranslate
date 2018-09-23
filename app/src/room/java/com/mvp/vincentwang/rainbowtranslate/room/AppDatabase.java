@@ -16,7 +16,6 @@ import com.mvp.vincentwang.rainbowtranslate.room.data.WordMain;
 @Database(entities = {WordMain.class, WordInfo.class, WordExample.class, SearchTime.class}, version = 1)
 @TypeConverters({DateConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
-
     public abstract WordMainDao wordMainDao();
 
     public abstract WordInfoDao wordInfoDao();
@@ -24,6 +23,4 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract WordExampleDao wordExampleDao();
 
     public abstract SearchTimeDao searchTimeDao();
-
-
 }

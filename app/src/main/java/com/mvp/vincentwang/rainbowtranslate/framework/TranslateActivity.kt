@@ -10,12 +10,15 @@ import com.mvp.vincentwang.rainbowtranslate.util.ActivityUtils
 import kotlinx.android.synthetic.main.activity_translate.*
 
 
-
-
-class TranslateActivity : BaseActivity(){
+class TranslateActivity : BaseActivity() {
 
     lateinit var mFirebaseAnalytics: FirebaseAnalytics
-
+    private  val translateFragment: TranslateFragment by lazy {
+        TranslateFragment()
+    }
+    private val searchStoreFragment: SearchStoreFragment by lazy {
+        SearchStoreFragment()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
@@ -26,7 +29,7 @@ class TranslateActivity : BaseActivity(){
         button_navigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.search_button -> gotoTranslateFragment()
-                R.id.store_button -> showFragment(SearchStoreFragment())
+                R.id.store_button -> gotoSearchStoreFragment()
                 R.id.setting_button -> {
                 }
             }
@@ -36,17 +39,16 @@ class TranslateActivity : BaseActivity(){
     }
 
 
-
     private fun showFragment(fragment: Fragment) {
         ActivityUtils.replaceFragmentToActivity(supportFragmentManager, fragment, R.id.fragment_container)
     }
 
     override fun gotoTranslateFragment() {
-        showFragment(TranslateFragment())
+        showFragment(translateFragment)
     }
 
     override fun gotoSearchStoreFragment() {
-        showFragment(SearchStoreFragment())
+        showFragment(searchStoreFragment)
     }
 
 }

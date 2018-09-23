@@ -26,6 +26,7 @@ class SearchStoreAdapter(val itemClickListener:(String)->Unit) : RecyclerView.Ad
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (wordMains != null) {
             holder.wordText.text=wordMains!![position].word
+            holder.searchTime.text = wordMains!![position].times.toString()
         }
     }
 
@@ -45,6 +46,7 @@ class SearchStoreAdapter(val itemClickListener:(String)->Unit) : RecyclerView.Ad
 
     class ViewHolder(view: View,val itemClickListener:(String)->Unit) : RecyclerView.ViewHolder(view) {
         val wordText = view.text_wordList_word
+        val searchTime = view.text_search_times
         init {
             view.card_wordList_view.setOnClickListener{
                 itemClickListener(wordText.text.toString())

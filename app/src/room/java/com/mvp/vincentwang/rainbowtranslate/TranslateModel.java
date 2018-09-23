@@ -29,10 +29,12 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.SingleSource;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 
 /**
@@ -41,7 +43,7 @@ import io.reactivex.functions.Function;
 
 public class TranslateModel implements Model {
 
-    private String storeWord="";
+    private String storeWord = "";
     private AppDbHelper appDbHelper;
 
     public TranslateModel(AppDbHelper appDbHelper) {
@@ -51,7 +53,16 @@ public class TranslateModel implements Model {
     @NonNull
     @Override
     public Flowable<List<WordMain>> getWordMainPeriod(final Calendar startDay, final Calendar endDay) {
-        return appDbHelper.findWordMainBetweenDates(startDay.getTime(),endDay.getTime()).toFlowable();
+        startDay.set(Calendar.MILLISECOND, 0);
+        startDay.set(Calendar.SECOND, 0);
+        startDay.set(Calendar.MINUTE, 0);
+        startDay.set(Calendar.HOUR, 0);
+        endDay.set(Calendar.MILLISECOND, 0);
+        endDay.set(Calendar.SECOND, 0);
+        endDay.set(Calendar.MINUTE, 0);
+        endDay.set(Calendar.HOUR, 0);
+        endDay.add(Calendar.DATE,1);
+        return appDbHelper.findWordMainBetweenDates(startDay.getTime(), endDay.getTime()).toFlowable();
 
     }
 
@@ -64,25 +75,12 @@ public class TranslateModel implements Model {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.HOUR, 0);
         Date today = calendar.getTime();
-        calendar.add(Calendar.DATE,1);
-        Date next = calendar.getTime();
-        return appDbHelper.findWordMainBetweenDates(today,next).toFlowable();
+        return appDbHelper.findWordMainBetweenDates(today, today).toFlowable();
     }
 
     @Override
     public Flowable<List<WordMain>> wordMainAll() {
         return appDbHelper.getWordMainAll().toFlowable();
-//        return Flowable.create(new FlowableOnSubscribe<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain>>() {
-//            @Override
-//            public void subscribe(FlowableEmitter<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain>> e) throws Exception {
-//                ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain> wordMains = getWordMain();
-//                if (wordMains != null) {
-//                    e.onNext(wordMains);
-//                } else {
-//                    e.onError(new Exception());
-//                }
-//            }
-//        }, BackpressureStrategy.BUFFER);
     }
 
     @Override
@@ -94,25 +92,6 @@ public class TranslateModel implements Model {
     @Override
     public Flowable<List<WordTotalInfo>> getStoreWordTranslateInfo() {
 
-//        return Flowable.create(new FlowableOnSubscribe<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordTotalInfo>>() {
-//            @Override
-//            public void subscribe(FlowableEmitter<ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordTotalInfo>> e) throws Exception {
-//                ArrayList<com.mvp.vincentwang.rainbowtranslate.room.data.WordTotalInfo> wordTotalInfos;
-//                List<com.mvp.vincentwang.rainbowtranslate.room.data.WordMain> wordMainList = getWordMainbyWord(storeWord);
-//                if (wordMainList.size() != 0) {
-//                    com.mvp.vincentwang.rainbowtranslate.room.data.WordMain wordMain = wordMainList.get(0);
-//                    String wordid = wordMain.getWordid();
-//                    String timeid = UUID.randomUUID().toString();
-//                    insertSearchTime(timeid, wordid, new Date());
-//                    wordMain.setTimes(wordMain.getTimes() + 1);
-//                    wordMainDao.update(wordMain);
-//                    wordTotalInfos = getWordTotalInfo(wordMain);
-//                    e.onNext(wordTotalInfos);
-//                } else {
-//                    e.onError(new Exception());
-//                }
-//            }
-//        }, BackpressureStrategy.BUFFER);
         return appDbHelper.getWordMainByWord(storeWord)
                 .flatMap(new Function<List<WordMain>, SingleSource<List<WordTotalInfo>>>() {
                     @Override
@@ -136,32 +115,9 @@ public class TranslateModel implements Model {
                         return saveWordTranslateInfo(word);
                     }
                 }).toFlowable();
-
-//        return Flowable.create(new FlowableOnSubscribe<ArrayList<com.mvp.vincentwang.rainbowtranslate.com.mvp.vincentwang.rainbowtranslate.data.WordTotalInfo>>() {
-//            @Override
-//            public void subscribe(FlowableEmitter<ArrayList<com.mvp.vincentwang.rainbowtranslate.com.mvp.vincentwang.rainbowtranslate.data.WordTotalInfo>> e) throws Exception {
-//                ArrayList<com.mvp.vincentwang.rainbowtranslate.com.mvp.vincentwang.rainbowtranslate.data.WordTotalInfo> wordTotalInfos;
-//                List<com.mvp.vincentwang.rainbowtranslate.com.mvp.vincentwang.rainbowtranslate.data.WordMain> wordMainList = getWordMainbyWord(word);
-//                if (wordMainList.size() != 0) {
-//                    com.mvp.vincentwang.rainbowtranslate.com.mvp.vincentwang.rainbowtranslate.data.WordMain wordMain = wordMainList.get(0);
-//                    String wordid = wordMain.getWordid();
-//                    String timeid = UUID.randomUUID().toString();
-//                    insertSearchTime(timeid, wordid, new Date());
-//                    wordMain.setTimes(wordMain.getTimes() + 1);
-//                    wordMainDao.update(wordMain);
-//                    wordTotalInfos = getWordTotalInfo(wordMain);
-//                } else {
-//                    saveWordTranslateInfo(word);
-//                    wordMainList = getWordMainbyWord(word);
-//                    wordTotalInfos = getWordTotalInfo(wordMainList.get(0));
-//
-//                }
-//                e.onNext(wordTotalInfos);
-//            }
-//        }, BackpressureStrategy.BUFFER);
     }
 
-    private Single<List<WordTotalInfo>> getWordTranslateInfo(final WordMain wordMain){
+    private Single<List<WordTotalInfo>> getWordTranslateInfo(final WordMain wordMain) {
         wordMain.setTimes(wordMain.getTimes() + 1);
         String wordid = wordMain.getWordid();
         String timeid = UUID.randomUUID().toString();
@@ -175,7 +131,7 @@ public class TranslateModel implements Model {
                 .flatMap(new Function<Boolean, SingleSource<List<WordTotalInfo>>>() {
                     @Override
                     public SingleSource<List<WordTotalInfo>> apply(Boolean aBoolean) throws Exception {
-                        return  appDbHelper.getWordTotalInfoByWordid(wordMain.getWordid());
+                        return appDbHelper.getWordTotalInfoByWordid(wordMain.getWordid());
                     }
                 });
     }
@@ -199,21 +155,6 @@ public class TranslateModel implements Model {
             }
         });
 
-//                .flatMap(new Function<Document, SingleEmitter<List<WordTotalInfo>>>() {
-//            @Override
-//            public SingleEmitter<List<WordTotalInfo>> apply(Document document) throws Exception {
-//                return saveWordInDB(document);
-//            }
-//        });
-
-//        JsoupUtil.getInstance().getHttp("http://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/" + sWord
-//                , new JsoupUtil.ResponseCallback() {
-//                    @Override
-//                    public void onResponse(Document document) throws IOException {
-//                        saveWordInDB(document);
-//                    }
-//                });
-
     }
 
     private Single<List<WordTotalInfo>> saveWordInDB(final Document document) {
@@ -221,62 +162,61 @@ public class TranslateModel implements Model {
         final String timeid = UUID.randomUUID().toString();
         final Elements body = document.select("div[class=entry-body__el clrd js-share-holder]");
         final Element word = body.select("span[class=hw]").first();
-
         return insertWordmain(wordid, word.text(), 1)
                 .flatMap(new Function<Boolean, SingleSource<Boolean>>() {
-                             @Override
-                             public SingleSource<Boolean> apply(Boolean aBoolean) throws Exception {
-                                 return insertSearchTime(timeid, wordid, new Date());
-                             }
-                         }
-                )
+                    @Override
+                    public SingleSource<Boolean> apply(Boolean aBoolean) throws Exception {
+                        return insertSearchTime(timeid, wordid, new Date());
+                    }
+                })
                 .flatMap(new Function<Boolean, SingleSource<List<WordTotalInfo>>>() {
                     @Override
                     public SingleSource<List<WordTotalInfo>> apply(Boolean aBoolean) throws Exception {
-                        List<WordTotalInfo> list = new ArrayList<>();
-
-                        for (Element bd : body) {
-                            WordTotalInfo wordTotalInfo = new WordTotalInfo();
-                            Elements type = bd.select("span[class=pos]");
-                            Elements sensebody = bd.select("div[class=sense-body]");
-                            Elements english_trans = sensebody.select("b[class=def]");
-                            Elements defbody = sensebody.select("span[class=def-body]");
-
-                            for (int i = 0; i < english_trans.size(); i++) {
-                                String wordinfoid = UUID.randomUUID().toString();
-                                Element chinese_trans = defbody.get(i).select("span[class=trans]").first();
-                                Elements examp = defbody.get(i).select("div[class=examp emphasized]");
-                                WordInfo wordInfo = new WordInfo(wordinfoid, wordid, chinese_trans.text(), english_trans.get(i).text(), type.text());
-                                wordTotalInfo.setWordInfo(wordInfo);
-                                appDbHelper.insertWordInfo(wordInfo);
-                                List<WordExample> wordExamples = new ArrayList<>();
-                                for (Element ex : examp) {
-                                    String exampleid = UUID.randomUUID().toString();
-                                    Elements english_example = ex.select("span[class=eg]");
-                                    Elements chinese_example_tran = ex.select("span[class=trans]");
-                                    WordExample wordExample = new WordExample(exampleid, wordinfoid, english_example.text(), chinese_example_tran.text());
-                                    wordExamples.add(wordExample);
-                                    appDbHelper.insertWordExample(wordExample);
-                                }
-                                wordTotalInfo.setWordExamples(wordExamples);
-                            }
-                            list.add(wordTotalInfo);
-                        }
-                        return getwordTotalInfo(list);
+                        return saveWordTotalInfo(body, wordid);
                     }
                 });
 
-        //        return insertWordmain(wordid, word.text(), 1)
-//                .flatMap(new Function<Boolean, ObservableSource<Boolean>>() {
+//        return insertWordmain(wordid, word.text(), 1)
+//                .flatMap(new Function<Boolean, SingleSource<Boolean>>() {
+//                             @Override
+//                             public SingleSource<Boolean> apply(Boolean aBoolean) throws Exception {
+//                                 return insertSearchTime(timeid, wordid, new Date());
+//                             }
+//                         }
+//                )
+//                .flatMap(new Function<Boolean, SingleSource<List<WordTotalInfo>>>() {
 //                    @Override
-//                    public ObservableSource<Boolean> apply(Boolean aBoolean) throws Exception {
-//                        return insertSearchTime(timeid, wordid, new Date());
-//                    }
-//                })
-//                .flatMap(new Function<Boolean, ObservableSource<List<WordTotalInfo>>>() {
-//                    @Override
-//                    public ObservableSource<List<WordTotalInfo>> apply(Boolean aBoolean) throws Exception {
-//                        return saveWordTotalInfo(body, wordid);
+//                    public SingleSource<List<WordTotalInfo>> apply(Boolean aBoolean) throws Exception {
+//                        List<WordTotalInfo> list = new ArrayList<>();
+//
+//                        for (Element bd : body) {
+//                            WordTotalInfo wordTotalInfo = new WordTotalInfo();
+//                            Elements type = bd.select("span[class=pos]");
+//                            Elements sensebody = bd.select("div[class=sense-body]");
+//                            Elements english_trans = sensebody.select("b[class=def]");
+//                            Elements defbody = sensebody.select("span[class=def-body]");
+//
+//                            for (int i = 0; i < english_trans.size(); i++) {
+//                                String wordinfoid = UUID.randomUUID().toString();
+//                                Element chinese_trans = defbody.get(i).select("span[class=trans]").first();
+//                                Elements examp = defbody.get(i).select("div[class=examp emphasized]");
+//                                WordInfo wordInfo = new WordInfo(wordinfoid, wordid, chinese_trans.text(), english_trans.get(i).text(), type.text());
+//                                wordTotalInfo.setWordInfo(wordInfo);
+//                                appDbHelper.insertWordInfo(wordInfo);
+//                                List<WordExample> wordExamples = new ArrayList<>();
+//                                for (Element ex : examp) {
+//                                    String exampleid = UUID.randomUUID().toString();
+//                                    Elements english_example = ex.select("span[class=eg]");
+//                                    Elements chinese_example_tran = ex.select("span[class=trans]");
+//                                    WordExample wordExample = new WordExample(exampleid, wordinfoid, english_example.text(), chinese_example_tran.text());
+//                                    wordExamples.add(wordExample);
+//                                    appDbHelper.insertWordExample(wordExample);
+//                                }
+//                                wordTotalInfo.setWordExamples(wordExamples);
+//                            }
+//                            list.add(wordTotalInfo);
+//                        }
+//                        return getwordTotalInfo(list);
 //                    }
 //                });
     }
@@ -291,118 +231,139 @@ public class TranslateModel implements Model {
     }
 
 
-//    private Observable<WordTotalInfo> saveWordExample(final WordTotalInfo wordTotalInfo) {
-//        final List<WordExample> wordExamples = new ArrayList<>();
-//        return Observable.create(new ObservableOnSubscribe<WordExample>() {
-//            @Override
-//            public void subscribe(ObservableEmitter<WordExample> e) throws Exception {
-//                for (Element ex : wordTotalInfo.getEx()) {
-//                    String exampleid = UUID.randomUUID().toString();
-//                    Elements english_example = ex.select("span[class=eg]");
-//                    Elements chinese_example_tran = ex.select("span[class=trans]");
-//                    WordExample wordExample = new WordExample(exampleid, wordTotalInfo.getWordInfo().getWordinfoid(), english_example.text(), chinese_example_tran.text());
-//                    appDbHelper.insertWordExample(wordExample);
-//                    e.onNext(wordExample);
-//                }
-//            }
-//        }).map(new Function<WordExample, List<WordExample>>() {
-//            @Override
-//            public List<WordExample> apply(WordExample wordExample) throws Exception {
-//                wordExamples.add(wordExample);
-//                return wordExamples;
-//            }
-//        }).map(new Function<List<WordExample>, WordTotalInfo>() {
-//            @Override
-//            public WordTotalInfo apply(List<WordExample> wordExamples) throws Exception {
-//                wordTotalInfo.setWordExamples(wordExamples);
-//                return wordTotalInfo;
-//            }
-//        });
-//    }
+    private Observable<List<WordExample>> saveWordExample(final Elements examp, final String wordinfoid) {
+        final List<WordExample> wordExamples = new ArrayList<>();
+        Observable.create(new ObservableOnSubscribe<WordExample>() {
+            @Override
+            public void subscribe(ObservableEmitter<WordExample> e) throws Exception {
+                for (Element ex : examp) {
+                    String exampleid = UUID.randomUUID().toString();
+                    Elements english_example = ex.select("span[class=eg]");
+                    Elements chinese_example_tran = ex.select("span[class=trans]");
+                    WordExample wordExample = new WordExample(exampleid, wordinfoid, english_example.text(), chinese_example_tran.text());
+                    e.onNext(wordExample);
+                }
+            }
+        }).subscribe(new Observer<WordExample>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(WordExample wordExample) {
+                appDbHelper.insertWordExample(wordExample);
+                wordExamples.add(wordExample);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        return Observable.just(wordExamples);
+    }
 
 
-//    private Observable<WordTotalInfo> saveWordInfo(final WordTotalInfo wordTotalInfo, final String wordid) {
-//        final Elements type = wordTotalInfo.getBody().select("span[class=pos]");
-//        final Elements sensebody = wordTotalInfo.getBody().select("div[class=sense-body]");
-//        final Elements english_trans = sensebody.select("b[class=def]");
-//        final Elements defbody = sensebody.select("span[class=def-body]");
-//        return Observable.create(new ObservableOnSubscribe<WordTotalInfo>() {
-//            @Override
-//            public void subscribe(ObservableEmitter<WordTotalInfo> e) throws Exception {
-//
-//                for (int i = 0; i < english_trans.size(); i++) {
-//                    String wordinfoid = UUID.randomUUID().toString();
-//                    Element chinese_trans = defbody.get(i).select("span[class=trans]").first();
-//                    Elements examp = defbody.get(i).select("div[class=examp emphasized]");
-//                    WordInfo wordInfo = new WordInfo(wordinfoid, wordid, chinese_trans.text(), english_trans.get(i).text(), type.text());
-//                    wordTotalInfo.setWordInfo(wordInfo);
-//                    wordTotalInfo.setEx(examp);
-//                    appDbHelper.insertWordInfo(wordInfo);
-//                    e.onNext(wordTotalInfo);
-//                }
-//            }
-//        }).flatMap(new Function<WordTotalInfo, ObservableSource<WordTotalInfo>>() {
-//
-//                       @Override
-//                       public ObservableSource<WordTotalInfo> apply(WordTotalInfo examp) throws Exception {
-//
-//                           return saveWordExample(examp);
-//                       }
-//                   }
-//        );
-//    }
+    private Observable<WordTotalInfo> saveWordInfo(Element body, final String wordid) {
+        final Elements type = body.select("span[class=pos]");
+        final Elements sensebody = body.select("div[class=sense-body]");
+        final Elements english_trans = sensebody.select("b[class=def]");
+        final Elements defbody = sensebody.select("span[class=def-body]");
+        final WordTotalInfo wordTotalInfo = new WordTotalInfo();
+
+        Observable.create(new ObservableOnSubscribe<Elements>() {
+            @Override
+            public void subscribe(ObservableEmitter<Elements> e) throws Exception {
+                for (int i = 0; i < english_trans.size(); i++) {
+                    String wordinfoid = UUID.randomUUID().toString();
+                    Element chinese_trans = defbody.get(i).select("span[class=trans]").first();
+                    Elements examp = defbody.get(i).select("div[class=examp emphasized]");
+                    WordInfo wordInfo = new WordInfo(wordinfoid, wordid, chinese_trans.text(), english_trans.get(i).text(), type.text());
+                    wordTotalInfo.setWordInfo(wordInfo);
+                    appDbHelper.insertWordInfo(wordInfo);
+                    e.onNext(examp);
+                }
+            }
+        }).flatMap(new Function<Elements, ObservableSource<List<WordExample>>>() {
+            @Override
+            public ObservableSource<List<WordExample>> apply(Elements elements) throws Exception {
+                return saveWordExample(elements,wordTotalInfo.getWordInfo().getWordinfoid());
+            }
+        }).subscribe(new Observer<List<WordExample>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(List<WordExample> wordExamples) {
+                wordTotalInfo.setWordExamples(wordExamples);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+        return Observable.just(wordTotalInfo);
+    }
 
 
-//    private Observable<List<WordTotalInfo>> saveWordTotalInfo(final Elements body, final String wordid) {
-//        final List<WordTotalInfo> list = new ArrayList<>();
-//        return Observable.create(new ObservableOnSubscribe<WordTotalInfo>() {
-//            @Override
-//
-//            public void subscribe(ObservableEmitter<WordTotalInfo> e) throws Exception {
-//                for (Element bd : body) {
-//                    WordTotalInfo wordTotalInfo = new WordTotalInfo();
-//                    wordTotalInfo.setBody(bd);
-//                    e.onNext(wordTotalInfo);
-//                }
-//            }
-//        }).flatMap(new Function<WordTotalInfo, ObservableSource<WordTotalInfo>>() {
-//            @Override
-//            public ObservableSource<WordTotalInfo> apply(WordTotalInfo wordTotalInfo) throws Exception {
-//                return saveWordInfo(wordTotalInfo, wordid);
-//            }
-//        }).map(new Function<WordTotalInfo, List<WordTotalInfo>>() {
-//            @Override
-//            public List<WordTotalInfo> apply(WordTotalInfo wordTotalInfo) throws Exception {
-//                list.add(wordTotalInfo);
-//                return list;
-//            }
-//        });
-//        for (Element bd : body) {
-//            WordTotalInfo wordTotalInfo = new WordTotalInfo();
-//            Elements type = bd.select("span[class=pos]");
-//            Elements sensebody = bd.select("div[class=sense-body]");
-//            Elements english_trans = sensebody.select("b[class=def]");
-//            Elements defbody = sensebody.select("span[class=def-body]");
-//
-//            for (int i = 0; i < english_trans.size(); i++) {
-//                String wordinfoid = UUID.randomUUID().toString();
-//                Element chinese_trans = defbody.get(i).select("span[class=trans]").first();
-//                Elements examp = defbody.get(i).select("div[class=examp emphasized]");
-//                WordInfo wordInfo = new WordInfo(wordinfoid, wordid, chinese_trans.text(), english_trans.get(i).text(), type.text());
-//                wordTotalInfo.setWordInfo(wordInfo);
-//                List<WordExample> wordExamples = new ArrayList<>();
-//                for (Element ex : examp) {
-//                    String exampleid = UUID.randomUUID().toString();
-//                    Elements english_example = ex.select("span[class=eg]");
-//                    Elements chinese_example_tran = ex.select("span[class=trans]");
-//                    WordExample wordExample = new WordExample(exampleid, wordinfoid, english_example.text(), chinese_example_tran.text());
-//                    wordExamples.add(wordExample);
-//                }
-//                wordTotalInfo.setWordExamples(wordExamples);
-//            }
-//        }
-//        return appDbHelper.insertWordTotalInfo(list);
-//    }
+    private Single<List<WordTotalInfo>> saveWordTotalInfo(final Elements body, final String wordid) {
+        final List<WordTotalInfo> list = new ArrayList<>();
+        Observable.create(new ObservableOnSubscribe<Element>() {
+            @Override
+
+            public void subscribe(ObservableEmitter<Element> e) throws Exception {
+                for (Element bd : body) {
+                    e.onNext(bd);
+                }
+            }
+        }).flatMap(new Function<Element, ObservableSource<WordTotalInfo>>() {
+            @Override
+            public ObservableSource<WordTotalInfo> apply(Element element) throws Exception {
+                return saveWordInfo(element, wordid);
+            }
+        }).subscribe(new Observer<WordTotalInfo>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(WordTotalInfo wordTotalInfo) {
+                list.add(wordTotalInfo);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        return Single.create(new SingleOnSubscribe<List<WordTotalInfo>>() {
+            @Override
+            public void subscribe(SingleEmitter<List<WordTotalInfo>> e) throws Exception {
+                e.onSuccess(list);
+            }
+        });
+    }
 
 
     private Single<Boolean> insertWordmain(String wordid, @NonNull String word, int times) {
@@ -416,7 +377,7 @@ public class TranslateModel implements Model {
         return appDbHelper.insertSearchTime(searchTime);
     }
 
-    private Single<Boolean> updateWordMain(WordMain wordMain){
+    private Single<Boolean> updateWordMain(WordMain wordMain) {
         return appDbHelper.updateWordMain(wordMain);
     }
 
