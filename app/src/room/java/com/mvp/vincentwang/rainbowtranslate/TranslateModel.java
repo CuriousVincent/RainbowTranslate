@@ -61,7 +61,7 @@ public class TranslateModel implements Model {
         endDay.set(Calendar.SECOND, 0);
         endDay.set(Calendar.MINUTE, 0);
         endDay.set(Calendar.HOUR, 0);
-        endDay.add(Calendar.DATE,1);
+        endDay.add(Calendar.DATE, 1);
         return appDbHelper.findWordMainBetweenDates(startDay.getTime(), endDay.getTime()).toFlowable();
 
     }
@@ -75,7 +75,9 @@ public class TranslateModel implements Model {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.HOUR, 0);
         Date today = calendar.getTime();
-        return appDbHelper.findWordMainBetweenDates(today, today).toFlowable();
+        calendar.add(Calendar.DATE, 1);
+        Date endday = calendar.getTime();
+        return appDbHelper.findWordMainBetweenDates(today, endday).toFlowable();
     }
 
     @Override
@@ -175,60 +177,8 @@ public class TranslateModel implements Model {
                         return saveWordTotalInfo(body, wordid);
                     }
                 });
-
-//        return insertWordmain(wordid, word.text(), 1)
-//                .flatMap(new Function<Boolean, SingleSource<Boolean>>() {
-//                             @Override
-//                             public SingleSource<Boolean> apply(Boolean aBoolean) throws Exception {
-//                                 return insertSearchTime(timeid, wordid, new Date());
-//                             }
-//                         }
-//                )
-//                .flatMap(new Function<Boolean, SingleSource<List<WordTotalInfo>>>() {
-//                    @Override
-//                    public SingleSource<List<WordTotalInfo>> apply(Boolean aBoolean) throws Exception {
-//                        List<WordTotalInfo> list = new ArrayList<>();
-//
-//                        for (Element bd : body) {
-//                            WordTotalInfo wordTotalInfo = new WordTotalInfo();
-//                            Elements type = bd.select("span[class=pos]");
-//                            Elements sensebody = bd.select("div[class=sense-body]");
-//                            Elements english_trans = sensebody.select("b[class=def]");
-//                            Elements defbody = sensebody.select("span[class=def-body]");
-//
-//                            for (int i = 0; i < english_trans.size(); i++) {
-//                                String wordinfoid = UUID.randomUUID().toString();
-//                                Element chinese_trans = defbody.get(i).select("span[class=trans]").first();
-//                                Elements examp = defbody.get(i).select("div[class=examp emphasized]");
-//                                WordInfo wordInfo = new WordInfo(wordinfoid, wordid, chinese_trans.text(), english_trans.get(i).text(), type.text());
-//                                wordTotalInfo.setWordInfo(wordInfo);
-//                                appDbHelper.insertWordInfo(wordInfo);
-//                                List<WordExample> wordExamples = new ArrayList<>();
-//                                for (Element ex : examp) {
-//                                    String exampleid = UUID.randomUUID().toString();
-//                                    Elements english_example = ex.select("span[class=eg]");
-//                                    Elements chinese_example_tran = ex.select("span[class=trans]");
-//                                    WordExample wordExample = new WordExample(exampleid, wordinfoid, english_example.text(), chinese_example_tran.text());
-//                                    wordExamples.add(wordExample);
-//                                    appDbHelper.insertWordExample(wordExample);
-//                                }
-//                                wordTotalInfo.setWordExamples(wordExamples);
-//                            }
-//                            list.add(wordTotalInfo);
-//                        }
-//                        return getwordTotalInfo(list);
-//                    }
-//                });
     }
 
-    private Single<List<WordTotalInfo>> getwordTotalInfo(final List<WordTotalInfo> list) {
-        return Single.create(new SingleOnSubscribe<List<WordTotalInfo>>() {
-            @Override
-            public void subscribe(SingleEmitter<List<WordTotalInfo>> e) throws Exception {
-                e.onSuccess(list);
-            }
-        });
-    }
 
 
     private Observable<List<WordExample>> saveWordExample(final Elements examp, final String wordinfoid) {
@@ -245,9 +195,11 @@ public class TranslateModel implements Model {
                 }
             }
         }).subscribe(new Observer<WordExample>() {
+            Disposable d;
+
             @Override
             public void onSubscribe(Disposable d) {
-
+                this.d = d;
             }
 
             @Override
@@ -258,12 +210,12 @@ public class TranslateModel implements Model {
 
             @Override
             public void onError(Throwable e) {
-
+                d.dispose();
             }
 
             @Override
             public void onComplete() {
-
+                d.dispose();
             }
         });
         return Observable.just(wordExamples);
@@ -293,12 +245,13 @@ public class TranslateModel implements Model {
         }).flatMap(new Function<Elements, ObservableSource<List<WordExample>>>() {
             @Override
             public ObservableSource<List<WordExample>> apply(Elements elements) throws Exception {
-                return saveWordExample(elements,wordTotalInfo.getWordInfo().getWordinfoid());
+                return saveWordExample(elements, wordTotalInfo.getWordInfo().getWordinfoid());
             }
         }).subscribe(new Observer<List<WordExample>>() {
+            Disposable d;
             @Override
             public void onSubscribe(Disposable d) {
-
+                this.d =d;
             }
 
             @Override
@@ -308,11 +261,13 @@ public class TranslateModel implements Model {
 
             @Override
             public void onError(Throwable e) {
+                d.dispose();
 
             }
 
             @Override
             public void onComplete() {
+                d.dispose();
 
             }
         });
@@ -337,9 +292,10 @@ public class TranslateModel implements Model {
                 return saveWordInfo(element, wordid);
             }
         }).subscribe(new Observer<WordTotalInfo>() {
+            Disposable d;
             @Override
             public void onSubscribe(Disposable d) {
-
+                this.d = d;
             }
 
             @Override
@@ -349,11 +305,13 @@ public class TranslateModel implements Model {
 
             @Override
             public void onError(Throwable e) {
+                d.dispose();
 
             }
 
             @Override
             public void onComplete() {
+                d.dispose();
 
             }
         });
