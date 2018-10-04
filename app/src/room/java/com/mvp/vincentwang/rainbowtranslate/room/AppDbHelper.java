@@ -83,4 +83,5 @@ public class AppDbHelper implements DbHelper {
     public Single<List<WordMain>> findWordMainBetweenDates(Date from, Date to) {
         return mAppDatabase.wordMainDao().findWordMainBetweenDates(from,to);
     }
+
 }

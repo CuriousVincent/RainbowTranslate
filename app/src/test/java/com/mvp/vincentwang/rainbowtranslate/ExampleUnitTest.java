@@ -155,20 +155,69 @@ public class ExampleUnitTest {
 
     @Test
     public void reverse() {
-        int a = 1234567893;
-        System.out.println(Integer.toBinaryString(a));
-        int b = reverseBits(a);
-        System.out.println(b);
-        System.out.println(Integer.toBinaryString(b));
+       String ans = longestPalindrome("abacab");
+        System.out.println(ans);
+
+//        int a = 1234567893;
+//        System.out.println(Integer.toBinaryString(a));
+//        int b = reverseBits(a);
+//        System.out.println(b);
+//        System.out.println(Integer.toBinaryString(b));
     }
 
     private int reverseBits(int n) {
         int res = 0;
-        for(int i = 0; i < 32; i++, n >>= 1){
-            System.out.println("n&1  "+(n & 1));
-            System.out.println("res  "+(res<<1));
+        for (int i = 0; i < 32; i++, n >>= 1) {
+            System.out.println("n&1  " + (n & 1));
+            System.out.println("res  " + (res << 1));
             res = res << 1 | (n & 1);
         }
         return res;
+    }
+
+    public String longestPalindrome(String s) {
+        String res = "";
+        int n =s.length();
+        int max = 0;
+
+        for(int start = 0;start<n;start++){
+            for(int end = start;end<n;end++){
+                if((end -start+1)<max) continue;
+                String sub = s.substring(start,end+1);
+                if(checkisP(sub)){
+                    if((end -start+1)>max){
+                        max = end-start+1;
+                        res = s.substring(start,end+1);
+                    }
+                }
+        }
+    }
+        return res;
+}
+
+
+    private boolean checkisP(String s) {
+        int n = s.length();
+        if (n == 1) return true;
+        String front = "";
+        String back = "";
+        int m = n / 2;
+        if (n % 2 == 0) {
+            front = s.substring(0, m);
+            back = s.substring(m, n);
+        } else {
+            front = s.substring(0,m);
+            back = s.substring(m+1,n);
+        }
+        int start = 0;
+        int end = back.length()-1;
+        while (start<front.length()){
+            if(front.charAt(start) != back.charAt(end)){
+                return false;
+            }
+             start++;
+            end--;
+        }
+        return true;
     }
 }

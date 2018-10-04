@@ -53,14 +53,8 @@ public class TranslateModel implements Model {
     @NonNull
     @Override
     public Flowable<List<WordMain>> getWordMainPeriod(final Calendar startDay, final Calendar endDay) {
-        startDay.set(Calendar.MILLISECOND, 0);
-        startDay.set(Calendar.SECOND, 0);
-        startDay.set(Calendar.MINUTE, 0);
-        startDay.set(Calendar.HOUR, 0);
-        endDay.set(Calendar.MILLISECOND, 0);
-        endDay.set(Calendar.SECOND, 0);
-        endDay.set(Calendar.MINUTE, 0);
-        endDay.set(Calendar.HOUR, 0);
+        setDate(startDay);
+        setDate(endDay);
         endDay.add(Calendar.DATE, 1);
         return appDbHelper.findWordMainBetweenDates(startDay.getTime(), endDay.getTime()).toFlowable();
 
@@ -70,15 +64,20 @@ public class TranslateModel implements Model {
     public Flowable<List<WordMain>> wordMainToday() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        calendar.set(Calendar.MILLISECOND, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.HOUR, 0);
+        setDate(calendar);
         Date today = calendar.getTime();
         calendar.add(Calendar.DATE, 1);
         Date endday = calendar.getTime();
         return appDbHelper.findWordMainBetweenDates(today, endday).toFlowable();
     }
+
+    private void setDate(Calendar calendar){
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR, 0);
+    }
+
 
     @Override
     public Flowable<List<WordMain>> wordMainAll() {
